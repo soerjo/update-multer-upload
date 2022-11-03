@@ -1,0 +1,30 @@
+var path = require("path");
+const Multer = require("fastify-multer");
+
+var storageMulter = Multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, __dirname + "/../../../FILE_DOCS/PHOTO/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, new Date().getTime() + path.extname(file.originalname));
+  },
+});
+
+var fileFilter = (req, file, cb) => {
+  if (file.mimetype === "image/png" || file.mimetype === "image/jpg" || file.mimetype === "image/jpeg") {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+
+var uploadMulter = Multer({
+  storage: storageMulter,
+  limits: { fileSize: 300000 }, // 500mb
+  fileFilter: fileFilter,
+});
+
+let uploadItemArray = uploadMulter.array("image");
+let uploadItemSingle = uploadMulter.single("image");
+
+module.exports = { uploadItemArray, uploadItemSingle };
