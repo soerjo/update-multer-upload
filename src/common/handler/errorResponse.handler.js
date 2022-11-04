@@ -1,4 +1,5 @@
 const ResObjectStats = require("../objClass/ResObjectStats.class");
+const saveLogs = require("./savelogs.handler");
 
 const errorResponseHandler = (res, statusCode, objResponse) => {
   try {
@@ -9,6 +10,8 @@ const errorResponseHandler = (res, statusCode, objResponse) => {
     statObjRes.errormessage = objResponse.resulterrormessage;
     statObjRes.tokentrans = objResponse.resulttokentrans;
     statObjRes.index = objResponse.resultindex;
+
+    saveLogs(res, statusCode, statObjRes);
 
     return res.status(statusCode).send({ status: statObjRes });
   } catch (error) {

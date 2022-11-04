@@ -1,11 +1,11 @@
 require("dotenv").config();
 const { signatureisvalid } = require("../../utils/signatureCheck");
-const ResObjectStats = require("../objClass/ResObjectStats.class");
+const ResObjectResult = require("../objClass/ResObject.class");
 
 const isDevMode = process.env.MODE === "DEVELOPMENT";
 
 const validateSignature = async (req, res) => {
-  const objReturnData = new ResObjectStats();
+  const objReturnData = new ResObjectResult();
   const { signature, tableuserlanguage, ...reqbody } = req.body;
 
   if (!isDevMode && reqbody.gtoken !== "PASS") {
@@ -16,11 +16,11 @@ const validateSignature = async (req, res) => {
 
     const isSignatureValid = signatureisvalid(concatreqbody, signature);
     if (!isSignatureValid) {
-      objReturnData.status = 0;
-      objReturnData.code = ["xxx999999960"];
-      objReturnData.errormessage = ["xxx999999960 signature is not valid"];
+      objReturnData.resultstatus = 0;
+      objReturnData.resultcode = ["xxx999999960"];
+      objReturnData.resulterrormessage = ["xxx999999960 signature is not valid"];
 
-      return res.status(400).send({ status: objReturnData });
+      return errorResponseHandler(res, 403, objReturnData);
     }
   }
 };

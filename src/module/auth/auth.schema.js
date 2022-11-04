@@ -33,7 +33,7 @@ const authStoreSchema = Joi.object({
     .custom((val, helper) => {
       if (!val.match(/^[0-9a-zA-Z\.\-\_]+$/)) return helper.message("xxx005190005 only allowed alphanumeric and . - _");
       if (!val.substring(0, 1).match(/^[a-zA-Z]+$/)) return helper.message("xxx005190005 start with non alphabet");
-      if (!val.substring(val.length-1, val.length).match(/^[a-zA-Z]+$/)) return helper.message("xxx005190005 end with non alphabet");
+      if (!val.substring(val.length - 1, val.length).match(/^[a-zA-Z]+$/)) return helper.message("xxx005190005 end with non alphabet");
       return val;
     })
     .required()
@@ -43,17 +43,21 @@ const authStoreSchema = Joi.object({
     .custom((val, helper) => {
       if (!val.match(/^[a-zA-Z\ ]+$/)) return helper.message("xxx005190005 only allowed alphabet and white space");
       if (!val.substring(0, 1).match(/^[a-zA-Z]+$/)) return helper.message("xxx005190005 start with non alphabet");
-      if (!val.substring(val.length-1, val.length).match(/^[a-zA-Z]+$/)) return helper.message("xxx005190005 end with non alphabet");
+      if (!val.substring(val.length - 1, val.length).match(/^[a-zA-Z]+$/)) return helper.message("xxx005190005 end with non alphabet");
       return val;
     })
-    .max(100).label("xxx005190005 fullname").required(),
-    tempuserphonecountrycode:Joi.number().required().label("xxx005190005 email"),
-    tempuserphonenumbershort: Joi.number()
-      .custom((val, helper) => {
-        console.log(val.toString())
-        if (val.toString().length < 7 || val.toString().length > 15 ) return helper.message("xxx005190005 must beetwen 7 and 15 digits");
-        return val;
-      }).required().label("xxx005190005 email"),
+    .max(100)
+    .label("xxx005190005 fullname")
+    .required(),
+  tempuserphonecountrycode: Joi.number().required().label("xxx005190005 phonecountrycode"),
+  tempuserphonenumbershort: Joi.number()
+    .custom((val, helper) => {
+      console.log(val.toString());
+      if (val.toString().length < 7 || val.toString().length > 15) return helper.message("xxx005190005 must beetwen 7 and 15 digits");
+      return val;
+    })
+    .required()
+    .label("xxx005190005 phonenumbershort"),
   tableuseremail: Joi.string().email().required().label("xxx005190005 email"),
 })
   .required()

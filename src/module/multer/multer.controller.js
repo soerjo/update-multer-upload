@@ -4,6 +4,7 @@ const responseHandler = require("../../common/handler/response.handler");
 const { execQuery } = require("../../configs/mysql.config");
 
 const uploadPhoto = async (req, res) => {
+  res.action = "/user/change_photo_profile";
   const { userindex } = req.body;
 
   try {

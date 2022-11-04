@@ -8,6 +8,7 @@ const { sendEmail } = require("../email/email.service");
 const NAMESPACE = "AUTH_CONTROLLER";
 
 const authInsertNew = async (req, res) => {
+  res.action = "/user/registration";
   const { tableuserreferredby } = req.next;
 
   try {
@@ -22,6 +23,7 @@ const authInsertNew = async (req, res) => {
 };
 
 const authDetailId = async (req, res) => {
+  res.action = "/user/registration";
   const resObjResult = new ResObjectStats();
   const { tokentrans } = req.next;
 
@@ -37,8 +39,8 @@ const authDetailId = async (req, res) => {
       return errorResponseHandler(res, 404, resObjResult);
     }
 
-    let resultgetsupport = await execQuery("SELECT * FROM xxxtablecountryphonecode;")
-    resultgetsupport = resultgetsupport
+    let resultgetsupport = await execQuery("SELECT * FROM xxxtablecountryphonecode;");
+    resultgetsupport = resultgetsupport;
 
     return responseHandler(res, resObjResult, resultspuserdetailid, resultgetsupport);
   } catch (error) {
@@ -47,16 +49,17 @@ const authDetailId = async (req, res) => {
 };
 
 const authStore = async (req, res) => {
+  res.action = "/user/registration";
   const resObjResult = new ResObjectStats();
   const { tokentrans, tableuserfullname, tableuserdisplayname, tableusername, tableuseremail, tempuserphonecountrycode, tempuserphonenumbershort } = req.next;
 
-  let initialusername = tableuserfullname.split(" ")
-  if(initialusername.length<2) {
-    initialusername = initialusername[0].substring(0,2)
-  }else{
-    initialusername =  initialusername[0].substring(0,1) + initialusername[1].substring(0,1)
+  let initialusername = tableuserfullname.split(" ");
+  if (initialusername.length < 2) {
+    initialusername = initialusername[0].substring(0, 2);
+  } else {
+    initialusername = initialusername[0].substring(0, 1) + initialusername[1].substring(0, 1);
   }
-  initialusername.toUpperCase()
+  initialusername = initialusername.toUpperCase();
 
   try {
     let resultusernameexists = await execQuery("SELECT COUNT (*) AS tableusername FROM xxxtableuser WHERE tableusername = ? AND tableuserisactive = 1", [tableusername]);
@@ -81,10 +84,19 @@ const authStore = async (req, res) => {
       return errorResponseHandler(res, 409, resObjResult);
     }
 
-    let resultspuserstore = await execQuery("CALL spxxxuserstore(?, ?, ?, ?, ?, ?, ?, ?)", [tokentrans, tableuserfullname, tableuserdisplayname, tempuserphonecountrycode, tempuserphonenumbershort, tableusername, tableuseremail, initialusername]);
+    let resultspuserstore = await execQuery("CALL spxxxuserstore(?, ?, ?, ?, ?, ?, ?, ?)", [
+      tokentrans,
+      tableuserfullname,
+      tableuserdisplayname,
+      tempuserphonecountrycode,
+      tempuserphonenumbershort,
+      tableusername,
+      tableuseremail,
+      initialusername,
+    ]);
     resultspuserstore = resultspuserstore[0][0];
 
-    if (!resultspuserstore.resultstatus) return errorResponseHandler(res, 401, resultspuserstore);
+    if (!resultspuserstore.resultstatus) return errorResponseHandler(res, 400, resultspuserstore);
 
     sendEmail({
       useremail: tableuseremail,
@@ -99,6 +111,7 @@ const authStore = async (req, res) => {
 };
 
 const authNewPassword = async (req, res) => {
+  res.action = "/user/register_newpassword";
   const { tableuseremailverificationcode, tableuserpasswordnew } = req.next;
 
   try {
@@ -114,12 +127,12 @@ const authNewPassword = async (req, res) => {
 };
 
 const authSigninController = async (req, res) => {
+  res.action = "/user/signin";
   const { platform, tableusername, tableuserpassword, latitude, longitude, tableuserlanguage } = req.next;
 
   try {
     let resultspuserinsertnew = await execQuery("CALL spxxxauthsignin(?,?,?,?,?,?)", [platform, tableusername, tableuserpassword, latitude, longitude, tableuserlanguage]);
     resultspuserinsertnew = resultspuserinsertnew[0][0];
-
     if (!resultspuserinsertnew.resultstatus) return errorResponseHandler(res, 401, resultspuserinsertnew);
 
     let resultspauthlogininfo = await execQuery("CALL spxxxauthlogininfo(?, ?)", [platform, resultspuserinsertnew.resultindex]);
@@ -132,6 +145,7 @@ const authSigninController = async (req, res) => {
 };
 
 const authLogoutController = async (req, res) => {
+  res.action = "/user/logout";
   const { platform, userindex } = req.next;
 
   try {
@@ -146,6 +160,7 @@ const authLogoutController = async (req, res) => {
 };
 
 const forgotController = async (req, res) => {
+  res.action = "/user/request_forgot_password";
   const { tableusername } = req.next;
 
   try {

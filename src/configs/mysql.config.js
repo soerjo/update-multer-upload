@@ -16,6 +16,7 @@ const dbConnection = () => {
       res(console.log("connected do db success..."));
     });
     db.on("error", (err) => {
+      console.error(err);
       process.exit(1);
     });
   });

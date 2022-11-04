@@ -1,26 +1,27 @@
 const Joi = require("joi");
-const ResObjectStats = require("../objClass/ResObjectStats.class");
+const errorResponseHandler = require("../handler/errorResponse.handler");
+const ResObjectResult = require("../objClass/ResObject.class");
 
 const validator = (schema) => async (req, res) => {
-  const objReturnData = new ResObjectStats();
+  const objReturnData = new ResObjectResult();
 
   if (!req.body) {
-    objReturnData.status = 0;
-    objReturnData.code = "xxx999999960";
-    objReturnData.errormessage = "body is not found";
+    objReturnData.resultstatus = 0;
+    objReturnData.resultcode = "xxx999999960";
+    objReturnData.resulterrormessage = "body is not found";
 
-    return res.status(400).send({ status: objReturnData });
+    return errorResponseHandler(res, 400, objReturnData);
   }
 
   try {
     const { error, value } = await schema.validate(req.body);
 
     if (error) {
-      objReturnData.status = error && 0;
-      objReturnData.code = error && error.details.map((err) => err.message.replace(/\"/g, "").substring(0, 12))[0];
-      objReturnData.errormessage = error && error.details.map((err) => err.message.replace(/\"/g, ""))[0];
+      objReturnData.resultstatus = error && 0;
+      objReturnData.resultcode = error && error.details.map((err) => err.message.replace(/\"/g, "").substring(0, 12))[0];
+      objReturnData.resulterrormessage = error && error.details.map((err) => err.message.replace(/\"/g, ""))[0];
 
-      res.status(400).send({ status: objReturnData });
+      return errorResponseHandler(res, 400, objReturnData);
     }
 
     req.next = { ...value };

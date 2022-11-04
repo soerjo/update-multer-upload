@@ -3,24 +3,20 @@ const { join } = require("path");
 const { existsSync, mkdirSync } = require("fs");
 const { contentParser } = require("fastify-multer");
 const { dbConnection } = require("./configs/mysql.config");
-const allRoutes = require("./routes/allroute");
 const { mongodbConnection } = require("./configs/mongodb.config");
-const LogsModel = require("./model/logs.model");
+const allRoutes = require("./routes/allroute");
+const logsrequest = require("./common/handler/logsrequest.handler");
 
 const port = process.env.PORT || 5000;
 const fastify = require("fastify")();
 fastify.register(require("@fastify/cors"), "*");
 fastify.register(require("@fastify/static"), {
   root: join(__dirname, "/../FILE_DOCS/PHOTO"),
-  prefix: "/xxx-user/",
+  prefix: process.env.UPLOADED_PREFIX || "/public/",
 });
-// fastify.register(require("@fastify/multipart"),);
+fastify.addHook("preHandler", logsrequest);
 fastify.register(contentParser);
 
-fastify.post("/save", (req, res) => {
-  LogsModel.create({ ...req.body });
-  return { message: "ok" };
-});
 fastify.get("/", (req, res) => res.status(200).send({ message: "ok" }));
 allRoutes(fastify);
 

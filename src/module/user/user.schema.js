@@ -129,10 +129,57 @@ const updatePasswordProfileSchema = Joi.object({
   .unknown()
   .label("xxx999999980 body");
 
+const changecolorSchema = Joi.object({
+  ...defaultSchema,
+  color: Joi.string().min(5).max(7).required().label("xxx005190005 color"),
+  userindex: Joi.string().min(5).max(16).required().label("xxx005190005 userindex"),
+  tokenlogin: Joi.string().required().label("xxx005190005 tokenlogin"),
+})
+  .required()
+  .unknown()
+  .label("xxx999999980 body");
+
 const resetPinProfileSchema = Joi.object({
   ...defaultSchema,
   userpinnew: Joi.string().min(5).max(16).required().label("xxx005190005 userpasswordold"),
   userpassword: Joi.string().min(5).max(16).required().label("xxx005190005 userpasswordnew"),
+  userindex: Joi.string().min(5).max(16).required().label("xxx005190005 userindex"),
+  tokenlogin: Joi.string().required().label("xxx005190005 tokenlogin"),
+})
+  .required()
+  .unknown()
+  .label("xxx999999980 body");
+
+const trigerOtpSchema = Joi.object({
+  ...defaultSchema,
+  userindex: Joi.string().min(5).max(16).required().label("xxx005190005 userindex"),
+  tokenlogin: Joi.string().required().label("xxx005190005 tokenlogin"),
+})
+  .required()
+  .unknown()
+  .label("xxx999999980 body");
+
+const validateOtpSchema = Joi.object({
+  ...defaultSchema,
+  otp: Joi.string().min(5).max(16).required().label("xxx005190005 otp"),
+  userindex: Joi.string().min(5).max(16).required().label("xxx005190005 userindex"),
+  tokenlogin: Joi.string().required().label("xxx005190005 tokenlogin"),
+})
+  .required()
+  .unknown()
+  .label("xxx999999980 body");
+
+const changePhoneNumberSchema = Joi.object({
+  ...defaultSchema,
+  tempuserphonecountrycode: Joi.number().required().label("xxx005190005 phonecountrycode"),
+  tempuserphonenumbershort: Joi.number()
+    .custom((val, helper) => {
+      console.log(val.toString());
+      if (val.toString().length < 7 || val.toString().length > 15) return helper.message("xxx005190005 must beetwen 7 and 15 digits");
+      return val;
+    })
+    .required()
+    .label("xxx005190005 phonenumbershort"),
   userindex: Joi.string().min(5).max(16).required().label("xxx005190005 userindex"),
   tokenlogin: Joi.string().required().label("xxx005190005 tokenlogin"),
 })
@@ -153,4 +200,8 @@ module.exports = {
   updateProfileSchema,
   updatePasswordProfileSchema,
   resetPinProfileSchema,
+  trigerOtpSchema,
+  validateOtpSchema,
+  changePhoneNumberSchema,
+  changecolorSchema,
 };

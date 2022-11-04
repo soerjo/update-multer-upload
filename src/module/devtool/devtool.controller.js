@@ -1,10 +1,10 @@
 const { PGAsignaturegenerate, signatureisvalid } = require("../../utils/signatureCheck");
-
 const ResObjectResult = require("../../common/objClass/ResObject.class");
 const { execQuery } = require("../../configs/mysql.config");
 const responseHandler = require("../../common/handler/response.handler");
 
 const signaturegenerateV01 = async (req) => {
+  res.action = "/system/generate_signature";
   const statObjRes = new ResObjectResult();
 
   try {
@@ -21,6 +21,7 @@ const signaturegenerateV01 = async (req) => {
 };
 
 const signatureverificationV01 = async (req) => {
+  res.action = "/system/validate_signature";
   const statObjRes = new ResObjectResult();
 
   try {
@@ -38,6 +39,8 @@ const signatureverificationV01 = async (req) => {
 };
 
 const getEmailVerificationLists = async (_, res) => {
+  res.action = "/system/get_mailverivication";
+
   try {
     let listEmailVerivication = await execQuery(
       "SELECT tableusername, tableuseremail, tableuseremailverificationcode FROM xxxtableuser WHERE tableuseremailisverified = 0 OR tableuseremailverificationcode <> '';"
