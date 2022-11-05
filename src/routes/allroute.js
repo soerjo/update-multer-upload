@@ -5,6 +5,8 @@ const userRoutes = require("../module/user/user.route");
 const authRoutes = require("../module/auth/auth.route");
 
 const allRoutes = (fastify) => {
+  fastify.get("/", (_, res) => res.status(200).send({ message: "ok" }));
+
   fastify.register(devToolRoutes, { prefix: "api/devtool" });
   fastify.register(authRoutes, { prefix: "api/auth" });
   fastify.register(userRoutes, { prefix: "api/user" });

@@ -2,26 +2,41 @@ const LogsModel = require("../../model/logs.model");
 
 const saveLogs = async (res, statusCode, statObjRes, error) => {
   try {
+    const method = res.logs.method;
+    const url = res.logs.url;
+    const datetime = new Date().toISOString();
+    const responsetime = `${new Date().getTime() - res.logs.timestamp}ms`;
+    console.log(`[ ${method} | ${url} | ${statusCode} ] - ${datetime} | ${responsetime}`);
+
     const payload = {
       status: statObjRes.status,
-      action: res.action || res.logs.logRequestObj?.action || "",
-      userindex: res.logs.request.body?.userindex || "",
-      error: error?.message,
-      logweb: res.logs.request.body.platform === "WEBSITE",
-      logapp: res.logs.request.body.platform !== "WEBSITE",
-      platform: res.logs.request.body.platform,
-      datetime: new Date().toISOString(),
-      ...res.logs.logRequestObj,
-      responsetime: `${new Date().getTime() - res.logs.logRequestObj.timestamp}ms`,
-      request: res.logs.request,
+      error: error?.message || "",
+      action: res.actions || "",
+      actionresult: res.actionresult || "",
+      platform: res.requestobj.body?.platform,
+      logweb: res.requestobj.body?.platform === "WEBSITE",
+      logapp: res.requestobj.body?.platform !== "WEBSITE",
+      datetime: datetime,
+      responsetime: responsetime,
+      ...res.logs,
+
+      userindex: res.userobject?.userindex || "",
+      username: res.userobject?.username || "",
+      userfullname: res.userobject?.userfullname || "",
+      userinitial: res.userobject?.userinitial || "",
+      usercolorback: res.userobject?.usercolorback || "",
+      userColorfront: res.userobject?.userColorfront || "",
+      userphotoprofileurl: res.userobject?.userphotoprofileurl || "",
+
+      ids: [...res.ids],
+
+      request: res.requestobj,
       response: {
         code: statusCode,
         statObjRes,
       },
     };
-    console.log(
-      `[ ${res.logs.logRequestObj.method} | ${res.logs.logRequestObj.url} | ${statusCode} ] - ${res.logs.logRequestObj.date} | ${new Date().getTime() - res.logs.logRequestObj.timestamp}ms `
-    );
+    // console.log(payload);
 
     LogsModel.create({ ...payload });
   } catch (error) {

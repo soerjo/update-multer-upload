@@ -2,19 +2,11 @@ const Joi = require("joi");
 const errorResponseHandler = require("../handler/errorResponse.handler");
 const ResObjectResult = require("../objClass/ResObject.class");
 
-const validator = (schema) => async (req, res) => {
+const validatorHeaders = (schema) => async (req, res) => {
   const objReturnData = new ResObjectResult();
 
-  if (!req.body) {
-    objReturnData.resultstatus = 0;
-    objReturnData.resultcode = "xxx999999960";
-    objReturnData.resulterrormessage = "body is not found";
-
-    return errorResponseHandler(res, 400, objReturnData);
-  }
-
   try {
-    const { error, value } = await schema.validate(req.body);
+    const { error, value } = await schema.validate(req.headers);
 
     if (error) {
       objReturnData.resultstatus = error && 0;
@@ -30,4 +22,4 @@ const validator = (schema) => async (req, res) => {
   }
 };
 
-module.exports = validator;
+module.exports = validatorHeaders;

@@ -1,9 +1,10 @@
+require("dotenv").config();
 var path = require("path");
 const Multer = require("fastify-multer");
 
 var storageMulter = Multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, __dirname + "/../../../FILE_DOCS/PHOTO/");
+    cb(null, __dirname + `/../../.${process.env.UPLOAD_FILE_DIR}`);
   },
   filename: (req, file, cb) => {
     cb(null, new Date().getTime() + path.extname(file.originalname));

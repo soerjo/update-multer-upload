@@ -14,11 +14,16 @@ const checkUserLogin = async (platform, userindex, tokenlogin) => {
   resultsptokenlast = resultsptokenlast[0][0];
 
   const isError = resultsptokenlast.resultcode !== "xxx000000000";
-  resResult.status = isError ? 0 : 1;
+  resResult.resultstatus = isError ? 0 : 1;
   resResult.resultcode = resultsptokenlast.resultcode;
   resResult.resulterrormessage = isError ? "unauthorize" : "";
 
-  return resResult;
+  if (isError) return resResult;
+
+  let resgetuser = await execQuery("SELECT * from xxxtableuser WHERE tableuserindex = ?;", [userindex]);
+  resgetuser = resgetuser[0];
+
+  return { ...resResult, data: resgetuser };
 };
 
 module.exports = { checkUserLogin };

@@ -1,15 +1,19 @@
 require("dotenv").config();
 const Joi = require("joi");
 
-const defaultSchema = {
+const defaultSchema = Joi.object({
+  gtoken: Joi.string().required().label("xxx999999980 gtoken"),
   platform: Joi.string().default("WEBSITE"),
-  gtoken: Joi.string().required().label("xxx999999980 gtoken headers"),
-  signature: Joi.string().required().label("xxx999999955 signature headers"),
-};
+  signature: Joi.string().required().label("xxx999999955 signature"),
+  userindex: Joi.string().min(5).max(16).required().label("xxx005190005 userindex"),
+  tokenlogin: Joi.string().required().label("xxx005190005 tokenlogin"),
+})
+  .required()
+  .unknown()
+  .label("xxx999999980 headers");
 
 // VALIDATE_HEADERS
 const headersSchema = Joi.object({
-  ...defaultSchema,
   tokenlogin: Joi.string().required().label("xxx005190005 tokenlogin headers"),
 })
   .required()
@@ -18,7 +22,6 @@ const headersSchema = Joi.object({
 
 // INSERT_SCHEMA
 const insertNewSchema = Joi.object({
-  ...defaultSchema,
   tableuserreferredby: Joi.string().required().label("xxx005190005 referredby"),
 })
   .required()
@@ -26,7 +29,6 @@ const insertNewSchema = Joi.object({
 
 // DETAIL_SCHEMA
 const authDetailSchema = Joi.object({
-  ...defaultSchema,
   tokentrans: Joi.string().required().label("xxx005190005 tokentrans"),
 })
   .required()
@@ -34,7 +36,6 @@ const authDetailSchema = Joi.object({
 
 // STORE_SCHEMA
 const authStoreSchema = Joi.object({
-  ...defaultSchema,
   tokentrans: Joi.string().required().label("xxx005190005 tokentrans"),
   tableusername: Joi.string()
     .min(5)
@@ -46,7 +47,7 @@ const authStoreSchema = Joi.object({
     })
     .required()
     .label("xxx005190005 tableusername"),
-  tableuserfullname: Joi.string().min(5).max(100).label("xxx005190005 fullname").required(),
+  tableuserfullname: Joi.string().min(5).max(100).alphanum().label("xxx005190005 fullname").required(),
   tableuseremail: Joi.string().email().required().label("xxx005190005 email"),
 })
   .required()
@@ -54,7 +55,6 @@ const authStoreSchema = Joi.object({
 
 // NEWPASSWORD_SCHEMA
 const authNewPasswordSchema = Joi.object({
-  ...defaultSchema,
   tableuseremailverificationcode: Joi.string().required().label("xxx065035010 emailverificationcode"),
   tableuserpasswordnew: Joi.string()
     .min(8)
@@ -69,7 +69,6 @@ const authNewPasswordSchema = Joi.object({
 
 // SIGNIN_SCHEMA
 const signinSchema = Joi.object({
-  ...defaultSchema,
   tableusername: Joi.string().min(5).max(20).required().label("xxx005190005 tableusername"),
   tableuserpassword: Joi.string().min(5).max(100).required().label("xxx005190005 fullname"),
   latitude: Joi.number().required().label("xxx005200005 latitude"),
@@ -81,7 +80,6 @@ const signinSchema = Joi.object({
 
 // LOGOUT_SCHEMA
 const logoutSchema = Joi.object({
-  ...defaultSchema,
   userindex: Joi.string().min(5).max(16).required().label("xxx005190005 userindex"),
 })
   .required()
@@ -90,7 +88,6 @@ const logoutSchema = Joi.object({
 
 // FORGOT_SCHEMA
 const forgotSchema = Joi.object({
-  ...defaultSchema,
   tableusername: Joi.string().min(5).max(20).required().label("xxx005190005 tableusername"),
 })
   .required()
@@ -98,79 +95,49 @@ const forgotSchema = Joi.object({
   .label("xxx999999980 body");
 
 // FORGOT_SCHEMA
-const profileSchema = Joi.object({
-  ...defaultSchema,
-  userindex: Joi.string().min(5).max(16).required().label("xxx005190005 userindex"),
-  tokenlogin: Joi.string().required().label("xxx005190005 tokenlogin"),
-})
-  .required()
-  .unknown()
-  .label("xxx999999980 body");
+const profileSchema = Joi.object({}).unknown().label("xxx999999980 body");
 
 // UPDATE_PROFILE
 const updateProfileSchema = Joi.object({
-  ...defaultSchema,
-  userindex: Joi.string().min(5).max(16).required().label("xxx005190005 userindex"),
   tableusername: Joi.string().min(5).max(16).required().label("xxx005190005 tableusername"),
-  tokenlogin: Joi.string().required().label("xxx005190005 tokenlogin"),
 })
   .required()
   .unknown()
   .label("xxx999999980 body");
 
 const updatePasswordProfileSchema = Joi.object({
-  ...defaultSchema,
   userpasswordold: Joi.string().min(5).max(16).required().label("xxx005190005 userpasswordold"),
   userpasswordnew: Joi.string().min(5).max(16).required().label("xxx005190005 userpasswordnew"),
-  userindex: Joi.string().min(5).max(16).required().label("xxx005190005 userindex"),
-  tokenlogin: Joi.string().required().label("xxx005190005 tokenlogin"),
 })
   .required()
   .unknown()
   .label("xxx999999980 body");
 
 const changecolorSchema = Joi.object({
-  ...defaultSchema,
   color: Joi.string().min(5).max(7).required().label("xxx005190005 color"),
-  userindex: Joi.string().min(5).max(16).required().label("xxx005190005 userindex"),
-  tokenlogin: Joi.string().required().label("xxx005190005 tokenlogin"),
 })
   .required()
   .unknown()
   .label("xxx999999980 body");
 
 const resetPinProfileSchema = Joi.object({
-  ...defaultSchema,
   userpinnew: Joi.string().min(5).max(16).required().label("xxx005190005 userpasswordold"),
   userpassword: Joi.string().min(5).max(16).required().label("xxx005190005 userpasswordnew"),
-  userindex: Joi.string().min(5).max(16).required().label("xxx005190005 userindex"),
-  tokenlogin: Joi.string().required().label("xxx005190005 tokenlogin"),
 })
   .required()
   .unknown()
   .label("xxx999999980 body");
 
-const trigerOtpSchema = Joi.object({
-  ...defaultSchema,
-  userindex: Joi.string().min(5).max(16).required().label("xxx005190005 userindex"),
-  tokenlogin: Joi.string().required().label("xxx005190005 tokenlogin"),
-})
-  .required()
-  .unknown()
-  .label("xxx999999980 body");
+const trigerOtpSchema = Joi.object({}).required().unknown().label("xxx999999980 body");
 
 const validateOtpSchema = Joi.object({
-  ...defaultSchema,
   otp: Joi.string().min(5).max(16).required().label("xxx005190005 otp"),
-  userindex: Joi.string().min(5).max(16).required().label("xxx005190005 userindex"),
-  tokenlogin: Joi.string().required().label("xxx005190005 tokenlogin"),
 })
   .required()
   .unknown()
   .label("xxx999999980 body");
 
 const changePhoneNumberSchema = Joi.object({
-  ...defaultSchema,
   tempuserphonecountrycode: Joi.number().required().label("xxx005190005 phonecountrycode"),
   tempuserphonenumbershort: Joi.number()
     .custom((val, helper) => {
@@ -180,14 +147,15 @@ const changePhoneNumberSchema = Joi.object({
     })
     .required()
     .label("xxx005190005 phonenumbershort"),
-  userindex: Joi.string().min(5).max(16).required().label("xxx005190005 userindex"),
-  tokenlogin: Joi.string().required().label("xxx005190005 tokenlogin"),
 })
   .required()
   .unknown()
   .label("xxx999999980 body");
 
+const insertPhoneNumberSchema = Joi.object({}).required().unknown().label("xxx999999980 body");
+
 module.exports = {
+  defaultSchema,
   headersSchema,
   insertNewSchema,
   authDetailSchema,
@@ -204,4 +172,5 @@ module.exports = {
   validateOtpSchema,
   changePhoneNumberSchema,
   changecolorSchema,
+  insertPhoneNumberSchema,
 };

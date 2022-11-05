@@ -5,9 +5,11 @@ const validateLogin = require("../../common/validator/login.validator");
 
 const authSchema = require("./auth.schema");
 const authController = require("./auth.controller");
+const validatorHeaders = require("../../common/validator/headers.validator");
 const namespace = "AUTH ROUTES";
 
 async function authRoutes(fastify) {
+  fastify.addHook("preHandler", validatorHeaders(authSchema.defaultSchema));
   fastify.addHook("preHandler", validateGtoken);
   fastify.addHook("preHandler", validateSignature);
 

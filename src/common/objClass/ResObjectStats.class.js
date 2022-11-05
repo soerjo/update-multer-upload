@@ -4,7 +4,6 @@ class ResObjectStats {
   errormessage = "";
   tokentrans = "";
   index = "";
-  timestampnext = "";
 }
 
 module.exports = ResObjectStats;

@@ -11,13 +11,12 @@ const port = process.env.PORT || 5000;
 const fastify = require("fastify")();
 fastify.register(require("@fastify/cors"), "*");
 fastify.register(require("@fastify/static"), {
-  root: join(__dirname, "/../FILE_DOCS/PHOTO"),
+  root: join(__dirname, `/.${process.env.UPLOAD_FILE_DIR}`),
   prefix: process.env.UPLOADED_PREFIX || "/public/",
 });
-fastify.addHook("preHandler", logsrequest);
 fastify.register(contentParser);
+fastify.addHook("preHandler", logsrequest);
 
-fastify.get("/", (req, res) => res.status(200).send({ message: "ok" }));
 allRoutes(fastify);
 
 const startServer = async () => {
@@ -33,7 +32,7 @@ const startServer = async () => {
 };
 
 const checkingDirectory = () => {
-  !existsSync(`./FILE_DOCS/PHOTOPROFILE`) && mkdirSync(`./FILE_DOCS/PHOTOPROFILE`, { recursive: true });
+  !existsSync(process.env.UPLOAD_FILE_DIR) && mkdirSync(process.env.UPLOAD_FILE_DIR, { recursive: true });
 };
 
 checkingDirectory();

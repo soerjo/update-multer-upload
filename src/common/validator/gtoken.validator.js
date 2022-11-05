@@ -1,6 +1,6 @@
 require("dotenv").config();
 const axios = require("axios");
-const errorResponseHandler = require("../handler/errorResponse.handler");
+const responseHandler = require("../handler/response.handler");
 const ResObjectResult = require("../objClass/ResObject.class");
 
 const isDevMode = process.env.MODE === "DEVELOPMENT";
@@ -12,24 +12,15 @@ const handleGtoken = async (gtoken) => {
     const responseAxiosGtoken = await axios.post(url);
     return responseAxiosGtoken.data;
   } catch (error) {
-    console.error(error.message);
-    return null;
+    throw new Error(error.message);
   }
 };
 
 const validateGtoken = async (req, res) => {
   const objReturnData = new ResObjectResult();
 
-  if (!req.body) {
-    objReturnData.resultstatus = 0;
-    objReturnData.resultcode = "xxx999999960";
-    objReturnData.resulterrormessage = "body is not found";
-
-    return errorResponseHandler(res, 400, objReturnData);
-  }
-
   try {
-    const { gtoken } = req.body;
+    const { gtoken } = req.headers;
     if (gtoken !== "PASSS" || !isDevMode) {
       let axiosresponse = handleGtoken(gtoken);
       if (axiosresponse.success != true || axiosresponse.success === undefined) {
@@ -46,7 +37,7 @@ const validateGtoken = async (req, res) => {
     throw new Error(error.message);
   }
 
-  if (!objReturnData.resultstatus) return errorResponseHandler(res, 400, objReturnData);
+  if (!objReturnData.resultstatus) return responseHandler({ res: res, statusCode: 400, objResponse: objReturnData });
 
   // next();
 };

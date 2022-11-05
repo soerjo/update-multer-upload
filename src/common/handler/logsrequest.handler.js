@@ -5,25 +5,24 @@ const logsrequest = async (req, res) => {
     reqbody = resreqbody;
   }
 
-  const logRequestObj = {
+  res.logs = {
     method: req.method,
     url: req.url,
     ip: req.ip,
     timestamp: new Date().getTime(),
-    date: new Date().toISOString(),
   };
-  res.logs = {
-    logRequestObj,
-    request: {
-      method: req.method,
-      url: req.url,
-      ip: req.ip,
-      "user-agent": req.headers["user-agent"],
-      query: req.query,
-      params: req.params,
-      body: reqbody,
-    },
+
+  res.requestobj = {
+    method: req.method,
+    url: req.url,
+    ip: req.ip,
+    useragent: req.headers["user-agent"],
+    query: req.query,
+    params: req.params,
+    body: reqbody,
   };
+
+  res.ids = [];
 };
 
 module.exports = logsrequest;

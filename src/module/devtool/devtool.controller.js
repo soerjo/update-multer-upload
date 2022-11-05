@@ -14,7 +14,7 @@ const signaturegenerateV01 = async (req) => {
     }
 
     const signature = PGAsignaturegenerate(concatreqbody);
-    return { status: statObjRes, signature, req_body: req.body };
+    return responseHandler({ res, objResponse: statObjRes, data: { signature: signature, body: req.body } });
   } catch (error) {
     throw new Error(error.message);
   }
@@ -32,7 +32,7 @@ const signatureverificationV01 = async (req) => {
     }
 
     const isvalid = signatureisvalid(concatreqbody, signature);
-    return { status: statObjRes, isvalid, req_body: req.body };
+    return responseHandler({ res, objResponse: statObjRes, data: req.body });
   } catch (error) {
     throw new Error(error.message);
   }
@@ -46,7 +46,7 @@ const getEmailVerificationLists = async (_, res) => {
       "SELECT tableusername, tableuseremail, tableuseremailverificationcode FROM xxxtableuser WHERE tableuseremailisverified = 0 OR tableuseremailverificationcode <> '';"
     );
 
-    return responseHandler(res, {}, listEmailVerivication);
+    return responseHandler({ res, data: listEmailVerivication });
   } catch (error) {
     throw new Error(error.message);
   }

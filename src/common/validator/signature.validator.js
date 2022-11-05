@@ -6,10 +6,16 @@ const isDevMode = process.env.MODE === "DEVELOPMENT";
 
 const validateSignature = async (req, res) => {
   const objReturnData = new ResObjectResult();
-  const { signature, tableuserlanguage, ...reqbody } = req.body;
+  const { signature, ...resheaders } = req.headers;
+  const reqbody = req.body;
 
-  if (!isDevMode && reqbody.gtoken !== "PASS") {
+  if (!isDevMode && resheaders.gtoken !== "PASS") {
     let concatreqbody = "";
+
+    for (let key in resheaders) {
+      concatreqbody = concatreqbody + resheaders[key];
+    }
+
     for (let key in reqbody) {
       concatreqbody = concatreqbody + reqbody[key];
     }

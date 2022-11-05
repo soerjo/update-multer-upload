@@ -1,15 +1,17 @@
 require("dotenv").config();
 const Joi = require("joi");
 
-const defaultSchema = {
+const defaultSchema = Joi.object({
   gtoken: Joi.string().label("xxx999999980 gtoken"),
   platform: Joi.string().default("WEBSITE"),
   signature: Joi.string().required().label("xxx999999955 signature"),
-};
+})
+  .required()
+  .unknown()
+  .label("xxx999999980 headers");
 
 // INSERT_SCHEMA
 const insertNewSchema = Joi.object({
-  ...defaultSchema,
   tableuserreferredby: Joi.string().required().label("xxx005190005 referredby"),
 })
   .required()
@@ -17,7 +19,6 @@ const insertNewSchema = Joi.object({
 
 // DETAIL_SCHEMA
 const authDetailSchema = Joi.object({
-  ...defaultSchema,
   tokentrans: Joi.string().required().label("xxx005190005 tokentrans"),
 })
   .required()
@@ -25,13 +26,12 @@ const authDetailSchema = Joi.object({
 
 // STORE_SCHEMA
 const authStoreSchema = Joi.object({
-  ...defaultSchema,
   tokentrans: Joi.string().required().label("xxx005190005 tokentrans"),
   tableusername: Joi.string()
     .min(5)
     .max(20)
     .custom((val, helper) => {
-      if (!val.match(/^[0-9a-zA-Z\.\-\_]+$/)) return helper.message("xxx005190005 only allowed alphanumeric and . - _");
+      // if (val.match(/^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/)) return helper.message("xxx005190005  no _ or . at the beginning");
       if (!val.substring(0, 1).match(/^[a-zA-Z]+$/)) return helper.message("xxx005190005 start with non alphabet");
       if (!val.substring(val.length - 1, val.length).match(/^[a-zA-Z]+$/)) return helper.message("xxx005190005 end with non alphabet");
       return val;
@@ -41,9 +41,9 @@ const authStoreSchema = Joi.object({
   tableuserfullname: Joi.string()
     .min(5)
     .custom((val, helper) => {
-      if (!val.match(/^[a-zA-Z\ ]+$/)) return helper.message("xxx005190005 only allowed alphabet and white space");
-      if (!val.substring(0, 1).match(/^[a-zA-Z]+$/)) return helper.message("xxx005190005 start with non alphabet");
-      if (!val.substring(val.length - 1, val.length).match(/^[a-zA-Z]+$/)) return helper.message("xxx005190005 end with non alphabet");
+      if (!val.match(/^[a-zA-Z\ ]+$/)) return helper.message("xxx005190005 fullname only allowed alphabet and white space");
+      if (!val.substring(0, 1).match(/^[a-zA-Z]+$/)) return helper.message("xxx005190005 fullname start with non alphabet");
+      if (!val.substring(val.length - 1, val.length).match(/^[a-zA-Z]+$/)) return helper.message("xxx005190005 fullname end with non alphabet");
       return val;
     })
     .max(100)
@@ -65,7 +65,6 @@ const authStoreSchema = Joi.object({
 
 // NEWPASSWORD_SCHEMA
 const authNewPasswordSchema = Joi.object({
-  ...defaultSchema,
   tableuseremailverificationcode: Joi.string().required().label("xxx065035010 emailverificationcode"),
   tableuserpasswordnew: Joi.string()
     .min(8)
@@ -83,9 +82,8 @@ const authNewPasswordSchema = Joi.object({
 
 // SIGNIN_SCHEMA
 const signinSchema = Joi.object({
-  ...defaultSchema,
-  tableusername: Joi.string().min(5).max(20).required().label("xxx005190005 tableusername"),
-  tableuserpassword: Joi.string().min(5).max(100).required().label("xxx005190005 fullname"),
+  tableusername: Joi.string().min(5).max(20).required().label("xxx005190005 username"),
+  tableuserpassword: Joi.string().min(5).max(100).required().label("xxx005190005 password"),
   latitude: Joi.number().required().label("xxx005200005 latitude"),
   longitude: Joi.number().required().label("xxx005250005 longitude"),
 })
@@ -95,7 +93,6 @@ const signinSchema = Joi.object({
 
 // LOGOUT_SCHEMA
 const logoutSchema = Joi.object({
-  ...defaultSchema,
   userindex: Joi.string().min(5).max(16).required().label("xxx005190005 userindex"),
 })
   .required()
@@ -104,7 +101,6 @@ const logoutSchema = Joi.object({
 
 // FORGOT_SCHEMA
 const forgotSchema = Joi.object({
-  ...defaultSchema,
   tableusername: Joi.string().min(5).max(20).required().label("xxx005190005 tableusername"),
 })
   .required()
@@ -112,6 +108,7 @@ const forgotSchema = Joi.object({
   .label("xxx999999980 body");
 
 module.exports = {
+  defaultSchema,
   insertNewSchema,
   authDetailSchema,
   authStoreSchema,
