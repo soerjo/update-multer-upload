@@ -127,7 +127,7 @@ const requestOtpController = async (req, res) => {
 
     // SEND OTP
     const resSendOtp = await sendOtp(sixRandomNumber, resSelectUser.tableuserphonenumber);
-    if (!resSendOtp.status) {
+    if (!resSendOtp?.status) {
       resultObj.resultstatus = 0;
       resultObj.resultcode = "xxx999999999";
       resultObj.resulterrormessage = resSendOtp?.message;

@@ -27,10 +27,13 @@ const authDetailSchema = Joi.object({
 // STORE_SCHEMA
 const authStoreSchema = Joi.object({
   tokentrans: Joi.string().required().label("xxx005190005 tokentrans"),
+  usernameinemail: Joi.string().email().required().label("xxx005190006 usernameinemail"),
   tableusername: Joi.string()
     .min(5)
     .max(20)
+    // .alphanum()
     .custom((val, helper) => {
+      console.log(val);
       // if (val.match(/^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/)) return helper.message("xxx005190005  no _ or . at the beginning");
       if (!val.substring(0, 1).match(/^[a-zA-Z]+$/)) return helper.message("xxx005190005 start with non alphabet");
       if (!val.substring(val.length - 1, val.length).match(/^[a-zA-Z]+$/)) return helper.message("xxx005190005 end with non alphabet");
@@ -52,7 +55,6 @@ const authStoreSchema = Joi.object({
   tempuserphonecountrycode: Joi.number().required().label("xxx005190005 phonecountrycode"),
   tempuserphonenumbershort: Joi.number()
     .custom((val, helper) => {
-      console.log(val.toString());
       if (val.toString().length < 7 || val.toString().length > 15) return helper.message("xxx005190005 must beetwen 7 and 15 digits");
       return val;
     })
