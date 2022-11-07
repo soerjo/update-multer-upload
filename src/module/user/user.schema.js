@@ -138,8 +138,8 @@ const validateOtpSchema = Joi.object({
   .label("xxx999999980 body");
 
 const changePhoneNumberSchema = Joi.object({
-  tempuserphonecountrycode: Joi.number().required().label("xxx005190005 phonecountrycode"),
-  tempuserphonenumbershort: Joi.number()
+  userphonecountrycode: Joi.number().required().label("xxx005190005 phonecountrycode"),
+  userphonenumbershort: Joi.number()
     .custom((val, helper) => {
       console.log(val.toString());
       if (val.toString().length < 7 || val.toString().length > 15) return helper.message("xxx005190005 must beetwen 7 and 15 digits");

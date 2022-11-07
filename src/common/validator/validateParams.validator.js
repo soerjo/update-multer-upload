@@ -3,11 +3,11 @@ const responseHandler = require("../handler/response.handler");
 const ErrorMessageObj = require("../objClass/ErrMessageObj.class");
 const ResObjectResult = require("../objClass/ResObject.class");
 
-const validateHeaders = (schema) => async (req, res) => {
+const validateParams = (schema) => async (req, res) => {
   const objReturnData = new ResObjectResult();
 
   try {
-    const { error, value } = await schema.validate(req.headers, { abortEarly: false });
+    const { error, value } = await schema.validate(req.query, { abortEarly: false });
 
     if (error) {
       objReturnData.resultstatus = error && 0;
@@ -32,4 +32,4 @@ const validateHeaders = (schema) => async (req, res) => {
   }
 };
 
-module.exports = validateHeaders;
+module.exports = validateParams;

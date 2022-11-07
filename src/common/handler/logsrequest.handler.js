@@ -14,6 +14,7 @@ const logsrequest = async (req, res) => {
 
   res.requestobj = {
     method: req.method,
+    headers: req.headers,
     url: req.url,
     ip: req.ip,
     useragent: req.headers["user-agent"],
@@ -21,6 +22,8 @@ const logsrequest = async (req, res) => {
     params: req.params,
     body: reqbody,
   };
+
+  res.apiresponse = [];
 
   res.ids = [];
 };

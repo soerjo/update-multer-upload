@@ -1,22 +1,48 @@
+const ErrorMessageObj = require("../objClass/ErrMessageObj.class");
 const ResObjectStats = require("../objClass/ResObjectStats.class");
 const saveLogs = require("./savelogs.handler");
 
 const responseHandler = ({ res, statusCode = 200, objResponse, data, support, error }) => {
   const statObjRes = new ResObjectStats();
+  const objErrorMessage = new ErrorMessageObj();
 
   if (objResponse) {
-    statObjRes.status = objResponse?.resultstatus;
-    statObjRes.code = objResponse?.resultcode;
-    statObjRes.errormessage = objResponse?.resulterrormessage;
-    statObjRes.tokentrans = objResponse?.resulttokentrans;
-    statObjRes.index = objResponse?.resultindex;
+    statObjRes.status = objResponse?.resultstatus || 0;
+    statObjRes.tokentrans = objResponse?.resulttokentrans || "";
+    statObjRes.index = objResponse?.resultindex || "";
+    statObjRes.message = objResponse?.resultmessage || [];
+
+    if (objResponse.resulterrormessage) {
+      objErrorMessage.code = objResponse.resultcode;
+      objErrorMessage.errormassage = objResponse.resulterrormessage;
+      objErrorMessage.codevariable = objResponse?.resultcodevariable || "";
+      statObjRes.message = [objErrorMessage];
+    }
   }
 
+  // handle error from multer "upload image"
   if (error?.name === "MulterError") {
     statusCode = 400;
     statObjRes.status = 0;
-    statObjRes.errormessage = error.message;
-    statObjRes.code = "xxx999999999";
+
+    objErrorMessage.code = "xxx999999999";
+    objErrorMessage.errormassage = error.message;
+
+    statObjRes.message = [objErrorMessage];
+  }
+
+  if (error?.statusCode === 400) {
+    statusCode = 400;
+    statObjRes.status = 0;
+
+    objErrorMessage.code = "xxx999999999";
+    objErrorMessage.errormassage = error.message;
+
+    statObjRes.message = [objErrorMessage];
+  }
+
+  if (statusCode >= 500) {
+    statObjRes.status = 0;
   }
 
   if (error) console.error(error);

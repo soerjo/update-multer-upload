@@ -1,0 +1,44 @@
+user geolocation info id
+user geolocation info userindex
+user geolocation info latitude
+user geolocation info longitude
+user geolocation info status
+user geolocation info country
+user geolocation info countryCode
+user geolocation info region
+user geolocation info regionName
+user geolocation info city
+user geolocation info zip
+user geolocation info lat
+user geolocation info lon
+user geolocation info timezone
+user geolocation info isp
+user geolocation info org
+user geolocation info as
+user geolocation info query
+user geolocation info timestamp
+token lastid
+token platform
+token userindex
+token lasttoken
+token lasttimestamp
+token lasthashiv
+token lastsignature
+token phonecodeid
+token phonecodecountryname
+token phonecodephonecode
+index id
+index index
+index description
+index lastindex
+index noteinternal
+index tag
+index hashiv
+index signature
+country phone code id
+country phone code countryname
+country phone code phonecode
+color default id
+color default colorback
+color default colorfront
+color default timestamp

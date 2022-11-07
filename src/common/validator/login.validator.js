@@ -5,6 +5,7 @@ const UserObjClass = require("../objClass/UserObj.class");
 
 const validateLogin = async (req, res) => {
   const { platform, userindex, tokenlogin } = req.next;
+  // console.log(platform, userindex, tokenlogin);
 
   const checkuser = await checkUserLogin(platform, userindex, tokenlogin);
 

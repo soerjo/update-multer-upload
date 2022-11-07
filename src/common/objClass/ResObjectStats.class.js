@@ -1,7 +1,6 @@
 class ResObjectStats {
   status = 1;
-  code = "xxx000000000";
-  errormessage = "";
+  message = [];
   tokentrans = "";
   index = "";
 }

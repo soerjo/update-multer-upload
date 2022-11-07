@@ -1,7 +1,10 @@
-const errorResponseHandler = require("../../common/handler/errorResponse.handler");
+const { v4: uuidv4 } = require("uuid");
+
 const responseHandler = require("../../common/handler/response.handler");
+const IdsObjClass = require("../../common/objClass/IdsObj.class");
 const ResObjectResult = require("../../common/objClass/ResObject.class");
 const ResObjectStats = require("../../common/objClass/ResObjectStats.class");
+const UserObjClass = require("../../common/objClass/UserObj.class");
 const { execQuery } = require("../../configs/mysql.config");
 const { sendEmail } = require("../email/email.service");
 
@@ -23,8 +26,9 @@ const authInsertNew = async (req, res) => {
 };
 
 const authDetailId = async (req, res) => {
+  res.id = uuidv4();
   res.actions = "/user/registration";
-  const resObjResult = new ResObjectStats();
+  const resObjResult = new ResObjectResult();
   const { tokentrans } = req.next;
 
   try {
@@ -32,7 +36,7 @@ const authDetailId = async (req, res) => {
     resultspuserdetailid = resultspuserdetailid[0][0];
 
     if (resultspuserdetailid.length <= 0) {
-      resObjResult.status = 0;
+      resObjResult.resultstatus = 0;
       resObjResult.resultcode = "xxx999999950";
       resObjResult.resulterrormessage = "NOT FOUND tokentrans";
 
@@ -42,16 +46,18 @@ const authDetailId = async (req, res) => {
     let resultgetsupport = await execQuery("SELECT * FROM xxxtablecountryphonecode;");
     resultgetsupport = resultgetsupport;
 
-    return responseHandler({ res, data: resultspuserdetailid, support: resultgetsupport });
+    resObjResult.resulttokentrans = resultspuserdetailid.tempusertokentrans;
+    return responseHandler({ res, data: resultspuserdetailid, support: resultgetsupport, objResponse: resObjResult });
   } catch (error) {
     throw new Error(error.message);
   }
 };
 
 const authStore = async (req, res) => {
+  res.id = uuidv4();
   res.actions = "/user/registration";
   const resObjResult = new ResObjectStats();
-  const { tokentrans, tableuserfullname, tableuserdisplayname, tableusername, tableuseremail, tempuserphonecountrycode, tempuserphonenumbershort } = req.next;
+  const { tokentrans, tableuserfullname, tableuserdisplayname, tableusername, tableuseremail, userphonenumbershort, userphonecountrycode } = req.next;
 
   let initialusername = tableuserfullname.split(" ");
   if (initialusername.length < 2) {
@@ -88,8 +94,8 @@ const authStore = async (req, res) => {
       tokentrans,
       tableuserfullname,
       tableuserdisplayname,
-      tempuserphonecountrycode,
-      tempuserphonenumbershort,
+      userphonecountrycode,
+      userphonenumbershort,
       tableusername,
       tableuseremail,
       initialusername,
@@ -99,6 +105,7 @@ const authStore = async (req, res) => {
     if (!resultspuserstore.resultstatus) return responseHandler({ res, statusCode: 409, objResponse: resultspuserstore });
 
     sendEmail({
+      res: res,
       useremail: tableuseremail,
       usernamefull: tableuserfullname,
       message: resultspuserstore.resultemailverificationcode,
@@ -111,6 +118,7 @@ const authStore = async (req, res) => {
 };
 
 const authNewPassword = async (req, res) => {
+  res.id = uuidv4();
   res.actions = "/user/register_newpassword";
   const { tableuseremailverificationcode, tableuserpasswordnew } = req.next;
 
@@ -118,7 +126,7 @@ const authNewPassword = async (req, res) => {
     let resultspusernewpassword = await execQuery("CALL spxxxusernewpassword(?, ?)", [tableuseremailverificationcode, tableuserpasswordnew]);
     resultspusernewpassword = resultspusernewpassword[0][0];
 
-    if (!resultspusernewpassword.resultstatus) return responseHandler({ res, statusCode: 404, objResponse: resultspuserstore });
+    if (!resultspusernewpassword.resultstatus) return responseHandler({ res, statusCode: 404, objResponse: resultspusernewpassword });
 
     return responseHandler({ res, objResponse: resultspusernewpassword });
   } catch (error) {
@@ -127,10 +135,9 @@ const authNewPassword = async (req, res) => {
 };
 
 const authSigninController = async (req, res) => {
+  res.id = uuidv4();
   res.actions = "/user/signin";
   const { platform, tableusername, tableuserpassword, latitude, longitude, tableuserlanguage } = req.next;
-
-  console.log({ platform, tableusername, tableuserpassword, latitude, longitude, tableuserlanguage });
 
   try {
     let resultspuserinsertnew = await execQuery("CALL spxxxauthsignin(?,?,?,?,?,?)", [platform, tableusername, tableuserpassword, latitude, longitude, tableuserlanguage]);
@@ -141,6 +148,25 @@ const authSigninController = async (req, res) => {
     let resultspauthlogininfo = await execQuery("CALL spxxxauthlogininfo(?, ?)", [platform, resultspuserinsertnew.resultindex]);
     resultspauthlogininfo = resultspauthlogininfo[0][0];
 
+    const idsobj = new IdsObjClass();
+    idsobj.id = resultspauthlogininfo.tableuserindex;
+    idsobj.description = resultspauthlogininfo.tableusername;
+    idsobj.colorback = resultspauthlogininfo.tableusercolorback;
+    idsobj.colorfront = resultspauthlogininfo.tableusercolorfront;
+    idsobj.imageurl = resultspauthlogininfo.tableuserphotourl;
+
+    const userobj = new UserObjClass();
+    userobj.userindex = resultspauthlogininfo.tableuserindex;
+    userobj.username = resultspauthlogininfo.tableusername;
+    userobj.userfullname = resultspauthlogininfo.tableuserfullname;
+    userobj.userinitial = resultspauthlogininfo.tableuserinitial;
+    userobj.usercolorback = resultspauthlogininfo.tableusercolorback;
+    userobj.userColorfront = resultspauthlogininfo.tableusercolorfront;
+    userobj.userphotoprofileurl = resultspauthlogininfo.tableuserphotourl;
+
+    res.userobject = userobj;
+    res.ids = [...res.ids, { ...idsobj }];
+
     return responseHandler({ res, objResponse: resultspuserinsertnew, data: resultspauthlogininfo });
   } catch (error) {
     throw new Error(error.message);
@@ -148,6 +174,7 @@ const authSigninController = async (req, res) => {
 };
 
 const authLogoutController = async (req, res) => {
+  res.id = uuidv4();
   res.actions = "/user/logout";
   const { platform, userindex } = req.next;
 
@@ -164,6 +191,7 @@ const authLogoutController = async (req, res) => {
 };
 
 const forgotController = async (req, res) => {
+  res.id = uuidv4();
   res.actions = "/user/request_forgot_password";
   const { tableusername } = req.next;
 
@@ -173,7 +201,8 @@ const forgotController = async (req, res) => {
 
     if (!resultspforgotpassword.resultstatus) return responseHandler({ res, statusCode: 409, objResponse: resultspforgotpassword });
 
-    sendEmail({
+    await sendEmail({
+      res: res,
       useremail: resultspforgotpassword.resultemail,
       usernamefull: tableusername,
       message: resultspforgotpassword.resultemailverificationcode,
@@ -186,7 +215,7 @@ const forgotController = async (req, res) => {
 };
 
 const isLogin = async (req, res) => {
-  const resResult = new ResObjectResult();
+  res.id = uuidv4();
   const { platform, tokenlogin } = req.body;
 
   try {

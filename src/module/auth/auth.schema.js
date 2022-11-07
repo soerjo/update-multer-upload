@@ -2,7 +2,7 @@ require("dotenv").config();
 const Joi = require("joi");
 
 const defaultSchema = Joi.object({
-  gtoken: Joi.string().label("xxx999999980 gtoken"),
+  gtoken: Joi.string().required().label("xxx999999980 gtoken"),
   platform: Joi.string().default("WEBSITE"),
   signature: Joi.string().required().label("xxx999999955 signature"),
 })
@@ -52,8 +52,8 @@ const authStoreSchema = Joi.object({
     .max(100)
     .label("xxx005190005 fullname")
     .required(),
-  tempuserphonecountrycode: Joi.number().required().label("xxx005190005 phonecountrycode"),
-  tempuserphonenumbershort: Joi.number()
+  userphonecountrycode: Joi.number().required().label("xxx005190005 phonecountrycode"),
+  userphonenumbershort: Joi.number()
     .custom((val, helper) => {
       if (val.toString().length < 7 || val.toString().length > 15) return helper.message("xxx005190005 must beetwen 7 and 15 digits");
       return val;

@@ -1,7 +1,9 @@
 const axios = require("axios");
-const saveLogs = require("../../common/handler/savelogs.handler");
+const ApiResponseObj = require("../../common/objClass/ApiResObj.class");
 
-const sendEmail = async ({ useremail, usernamefull, message }) => {
+const sendEmail = async ({ res, useremail, usernamefull, message }) => {
+  const apiObj = new ApiResponseObj();
+
   // try {
   //   const resMail = await axios.post(
   //     "https://email-portal.6mbr.com/api/sendmail",
@@ -21,7 +23,13 @@ const sendEmail = async ({ useremail, usernamefull, message }) => {
   //     }
   //   );
   //   //   call MongoDb to save log mail
-  //   await saveLogs({ email: useremail, status: resMail.statusText, message, response: JSON.stringify(resMail.data) });
+
+  apiObj.apiName = "call email api";
+  apiObj.timeStamp = new Date().getTime();
+  // apiObj.response = otpResponse.data;
+
+  res.apiresponse = [...res.apiresponse, apiObj];
+
   // } catch (error) {
   //   throw new Error(error.message);
   // }

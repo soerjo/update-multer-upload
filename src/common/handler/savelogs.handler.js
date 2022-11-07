@@ -9,13 +9,14 @@ const saveLogs = async (res, statusCode, statObjRes, error) => {
     console.log(`[ ${method} | ${url} | ${statusCode} ] - ${datetime} | ${responsetime}`);
 
     const payload = {
+      logsid: res?.id || "",
       status: statObjRes.status,
       error: error?.message || "",
       action: res.actions || "",
       actionresult: res.actionresult || "",
       platform: res.requestobj.body?.platform,
-      logweb: res.requestobj.body?.platform === "WEBSITE",
-      logapp: res.requestobj.body?.platform !== "WEBSITE",
+      logweb: res.requestobj.headers?.platform === "WEBSITE",
+      logapp: res.requestobj.headers?.platform !== "WEBSITE",
       datetime: datetime,
       responsetime: responsetime,
       ...res.logs,
@@ -29,16 +30,19 @@ const saveLogs = async (res, statusCode, statObjRes, error) => {
       userphotoprofileurl: res.userobject?.userphotoprofileurl || "",
 
       ids: [...res.ids],
+      APIresponse: res?.apiresponse || [],
 
       request: res.requestobj,
       response: {
         code: statusCode,
-        statObjRes,
+        ...statObjRes,
       },
     };
-    // console.log(payload);
 
-    LogsModel.create({ ...payload });
+    // console.log(payload);
+    if (res.actions !== "/actifity/lists") {
+      LogsModel.create({ ...payload });
+    }
   } catch (error) {
     console.error(error);
   }
