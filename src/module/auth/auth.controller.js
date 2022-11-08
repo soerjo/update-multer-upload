@@ -134,7 +134,7 @@ const authStore = async (req, res) => {
 
     if (!resultspuserstore.resultstatus) return responseHandler({ res, statusCode: 409, objResponse: resultspuserstore });
 
-    let resultSelectUserTable = await execQuery("SELECT * AS tableuseremail FROM xxxtableuser WHERE tableuserindex = ?", [resultspuserstore.resultindex]);
+    let resultSelectUserTable = await execQuery("SELECT * FROM xxxtableuser WHERE tableuserindex = ?;", [resultspuserstore.resultindex]);
     resultSelectUserTable = resultSelectUserTable[0];
 
     const idsobj = new IdsObjClass();
@@ -145,6 +145,16 @@ const authStore = async (req, res) => {
     idsobj.colorfront = resultSelectUserTable.tableusercolorfront;
     idsobj.imageurl = resultSelectUserTable.tableuserphotourl;
 
+    const userobj = new UserObjClass();
+    userobj.userindex = resultSelectUserTable.tableuserindex;
+    userobj.username = resultSelectUserTable.tableusername;
+    userobj.userfullname = resultSelectUserTable.tableuserfullname;
+    userobj.userinitial = resultSelectUserTable.tableuserinitial;
+    userobj.usercolorback = resultSelectUserTable.tableusercolorback;
+    userobj.userColorfront = resultSelectUserTable.tableusercolorfront;
+    userobj.userphotoprofileurl = resultSelectUserTable.tableuserphotourl;
+
+    res.userobject = userobj;
     res.ids = [...res.ids, { ...idsobj }];
 
     sendEmail({
