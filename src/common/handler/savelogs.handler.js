@@ -7,11 +7,10 @@ const saveLogs = async (res, statusCode, statObjRes, error) => {
     const url = res.logs.url;
     const datetime = new Date().toISOString();
     const responsetime = `${new Date().getTime() - res.logs.timestamp}ms`;
-    console.log(`[ ${method} | ${url} | ${statusCode} ] - ${datetime} | ${responsetime}`);
 
     const payload = {
       logsid: res?.id || "",
-      status: statObjRes.status,
+      status: statObjRes?.status,
       error: error?.message || "",
       action: res.actions || "",
       actionresult: res.actionresult || "",
@@ -50,6 +49,7 @@ const saveLogs = async (res, statusCode, statObjRes, error) => {
         break;
       default:
         LogsModel.create({ ...payload });
+        console.log(`[ ${method} | ${url} | ${statusCode} ] - ${datetime} | ${responsetime}`);
         break;
     }
   } catch (error) {
