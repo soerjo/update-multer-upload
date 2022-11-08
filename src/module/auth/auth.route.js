@@ -1,14 +1,14 @@
 const validateGtoken = require("../../common/validator/gtoken.validator");
 const validator = require("../../common/validator/schema.validator");
 const validateSignature = require("../../common/validator/signature.validator");
-const validateLogin = require("../../common/validator/login.validator");
 
 const authSchema = require("./auth.schema");
 const authController = require("./auth.controller");
 const validatorHeaders = require("../../common/validator/headers.validator");
+
 const namespace = "AUTH ROUTES";
 
-const customValidateStore = async (req, res) => {
+const customValidateStore = async (req) => {
   req.body.usernameinemail = req.body.tableusername + "@gmail.com";
 };
 
@@ -16,8 +16,6 @@ async function authRoutes(fastify) {
   fastify.addHook("preHandler", validatorHeaders(authSchema.defaultSchema));
   fastify.addHook("preHandler", validateGtoken);
   fastify.addHook("preHandler", validateSignature);
-
-  fastify.route({ method: "POST", url: "/v01/islogin", preHandler: validateLogin, handler: authController.isLogin });
 
   // REGISTER_ROUTE
   fastify.route({ method: "POST", url: "/v01/insertnew", preHandler: validator(authSchema.insertNewSchema), handler: authController.authInsertNew });

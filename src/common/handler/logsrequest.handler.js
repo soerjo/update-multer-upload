@@ -23,6 +23,7 @@ const logsrequest = async (req, res) => {
     body: reqbody,
   };
 
+  res.isnotification = false;
   res.apiresponse = [];
 
   res.ids = [];

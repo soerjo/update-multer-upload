@@ -1,7 +1,7 @@
 const { Schema } = require("mongoose");
 const { mongodb } = require("../configs/mongodb.config");
 
-const miscsSchema = new Schema({}, { strict: false });
-const MiscsModel = mongodb.model("misc_xxx_user", miscsSchema);
+const otpsSchema = new Schema({}, { strict: false });
+const OtpsModel = mongodb.model("misc_xxx_user", otpsSchema);
 
-module.exports = MiscsModel;
+module.exports = OtpsModel;

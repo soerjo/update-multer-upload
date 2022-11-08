@@ -11,6 +11,7 @@ const { sendEmail } = require("../email/email.service");
 const NAMESPACE = "AUTH_CONTROLLER";
 
 const authInsertNew = async (req, res) => {
+  res.isnotification = false;
   res.id = uuidv4();
   res.actions = "/user/registration";
   const { tableuserreferredby } = req.next;
@@ -27,6 +28,7 @@ const authInsertNew = async (req, res) => {
 };
 
 const authDetailId = async (req, res) => {
+  res.isnotification = false;
   res.id = uuidv4();
   res.actions = "/user/registration";
   const resObjResult = new ResObjectResult();
@@ -55,11 +57,13 @@ const authDetailId = async (req, res) => {
 };
 
 const authStore = async (req, res) => {
+  res.isnotification = false;
   res.id = uuidv4();
   res.actions = "/user/registration";
   const resObjResult = new ResObjectStats();
   const { tokentrans, tableuserfullname, tableuserdisplayname, tableusername, tableuseremail, userphonenumbershort, userphonecountrycode } = req.next;
 
+  // GENERAET INITIAL;
   let initialusername = tableuserfullname.split(" ");
   if (initialusername.length < 2) {
     initialusername = initialusername[0].substring(0, 2);
@@ -79,7 +83,7 @@ const authStore = async (req, res) => {
 
       return responseHandler({ res, statusCode: 400, objResponse: resultObj });
     }
-    
+
     let resultusernameexists = await execQuery("SELECT COUNT (*) AS tableusername FROM xxxtableuser WHERE tableusername = ? AND tableuserisactive = 1", [tableusername]);
     resultusernameexists = resultusernameexists[0];
 
@@ -130,6 +134,7 @@ const authStore = async (req, res) => {
 };
 
 const authNewPassword = async (req, res) => {
+  res.isnotification = false;
   res.id = uuidv4();
   res.actions = "/user/register_newpassword";
   const { tableuseremailverificationcode, tableuserpasswordnew } = req.next;
@@ -147,6 +152,7 @@ const authNewPassword = async (req, res) => {
 };
 
 const authSigninController = async (req, res) => {
+  res.isnotification = false;
   res.id = uuidv4();
   res.actions = "/user/signin";
   const { platform, tableusername, tableuserpassword, latitude, longitude, tableuserlanguage } = req.next;
@@ -186,6 +192,7 @@ const authSigninController = async (req, res) => {
 };
 
 const authLogoutController = async (req, res) => {
+  res.isnotification = false;
   res.id = uuidv4();
   res.actions = "/user/logout";
   const { platform, userindex } = req.next;
@@ -203,6 +210,7 @@ const authLogoutController = async (req, res) => {
 };
 
 const forgotController = async (req, res) => {
+  res.isnotification = false;
   res.id = uuidv4();
   res.actions = "/user/request_forgot_password";
   const { tableusername } = req.next;
@@ -226,33 +234,6 @@ const forgotController = async (req, res) => {
   }
 };
 
-const isLogin = async (req, res) => {
-  res.id = uuidv4();
-  const { platform, tokenlogin } = req.body;
-
-  try {
-    let userindex = "";
-    let username = "";
-    if (platform != "WEBSITE") {
-      let resultselectuser = await execQuery("SELECT tableuserindex, tableusername FROM xxxtableuser WHERE tableuserapptoken = ?", [tokenlogin]);
-      resultselectuser = resultselectuser[0];
-
-      userindex = resultselectuser.tableuserindex;
-      username = resultselectuser.tableusername;
-    } else {
-      let resultselectuser = await execQuery("SELECT tableuserindex, tableusername FROM xxxtableuser WHERE tableuserwebtoken = ?", [tokenlogin]);
-      resultselectuser = resultselectuser[0];
-
-      userindex = resultselectuser.tableuserindex;
-      username = resultselectuser.tableusername;
-    }
-
-    return responseHandler({ res, objResponse: resultspforgotpassword, data: { userindex, username } });
-  } catch (error) {
-    throw new Error(error.message);
-  }
-};
-
 module.exports = {
   authInsertNew,
   authDetailId,
@@ -261,5 +242,4 @@ module.exports = {
   authSigninController,
   authLogoutController,
   forgotController,
-  isLogin,
 };

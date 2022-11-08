@@ -10,7 +10,7 @@ const validateSignature = async (req, res) => {
   const objReturnData = new ResObjectResult();
   const objErrorMessage = new ErrorMessageObj();
 
-  const { signature, ...allrequestheaders } = req.next;
+  const { signature, ...allrequestheaders } = { ...req.next };
   const { tableuserlanguage = "en", ...allrequestbody } = { ...req.body };
 
   let concatreqbody = "";

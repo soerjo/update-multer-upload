@@ -3,32 +3,41 @@ const ResObjectResult = require("../../common/objClass/ResObject.class");
 const { execQuery } = require("../../configs/mysql.config");
 const responseHandler = require("../../common/handler/response.handler");
 
-const signaturegenerateV01 = async (req) => {
+const signaturegenerateV01 = async (req, res) => {
   res.action = "/system/generate_signature";
   const statObjRes = new ResObjectResult();
 
   try {
     let concatreqbody = "";
+    for (let key in req.next) {
+      concatreqbody = concatreqbody + req.next[key].toString().trim();
+    }
+
     for (let key in req.body) {
       concatreqbody = concatreqbody + req.body[key].toString().trim();
     }
 
     const signature = PGAsignaturegenerate(concatreqbody);
-    return responseHandler({ res, objResponse: statObjRes, data: { signature: signature, body: req.body } });
+    return responseHandler({ res, objResponse: statObjRes, data: { signature: signature, headers: req.next, body: req.body } });
   } catch (error) {
     throw new Error(error.message);
   }
 };
 
-const signatureverificationV01 = async (req) => {
+const signatureverificationV01 = async (req, res) => {
   res.action = "/system/validate_signature";
   const statObjRes = new ResObjectResult();
 
   try {
-    const { signature, ...reqbody } = req.body;
+    const { signature, ...reqbody } = req.next;
     let concatreqbody = "";
+
+    for (let key in req.next) {
+      concatreqbody = concatreqbody + req.next[key].toString().trim();
+    }
+
     for (let key in reqbody) {
-      concatreqbody = concatreqbody + reqbody[key];
+      concatreqbody = concatreqbody + reqbody[key].toString().trim();
     }
 
     const isvalid = signatureisvalid(concatreqbody, signature);

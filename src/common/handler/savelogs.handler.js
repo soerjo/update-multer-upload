@@ -17,6 +17,7 @@ const saveLogs = async (res, statusCode, statObjRes, error) => {
       platform: res.requestobj.body?.platform,
       logweb: res.requestobj.headers?.platform === "WEBSITE",
       logapp: res.requestobj.headers?.platform !== "WEBSITE",
+      isnotification: res.isnotification,
       datetime: datetime,
       responsetime: responsetime,
       ...res.logs,

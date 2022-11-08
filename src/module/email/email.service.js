@@ -6,7 +6,7 @@ const sendEmail = async ({ res, useremail, usernamefull, message }) => {
 
   try {
     const resMail = await axios.post(
-      "https://email-portal.6mbr.com/api/sendmail",
+      "https://email-portal.6mbr.com/api/sendmailfdafdsa",
       {
         email: useremail,
         from: "noreply@dhita.net",
@@ -22,20 +22,14 @@ const sendEmail = async ({ res, useremail, usernamefull, message }) => {
         },
       }
     );
-    //   call MongoDb to save log mail
-
-  apiObj.apiName = "call email api";
-  apiObj.timeStamp = new Date().getTime();
-  apiObj.response = otpResponse.data;  
-
-  } catch (error) {
     apiObj.apiName = "call email api";
     apiObj.timeStamp = new Date().getTime();
-    apiObj.response = error.response;
+    apiObj.response = resMail.data;
+  } catch (error) {
+    console.log(error);
   }
 
   res.apiresponse = [...res.apiresponse, apiObj];
-
 };
 
 module.exports = { sendEmail };

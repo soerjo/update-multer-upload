@@ -9,6 +9,7 @@ const ResObjectResult = require("../../common/objClass/ResObject.class");
 const namespace = "AUTH_CONTROLLER";
 
 const profileController = async (req, res) => {
+  res.isnotification = false;
   res.id = uuidv4();
   res.actions = "/user/show_detail_id";
   const { userindex } = req.next;
@@ -24,6 +25,7 @@ const profileController = async (req, res) => {
 };
 
 const updateUsernameController = async (req, res) => {
+  res.isnotification = false;
   res.id = uuidv4();
   res.actions = "/user/update_username";
   const { platform, tokenlogin, tableusername } = req.next;
@@ -41,6 +43,7 @@ const updateUsernameController = async (req, res) => {
 };
 
 const updatePasswordProfil = async (req, res) => {
+  res.isnotification = false;
   res.id = uuidv4();
   res.actions = "/user/change_password";
   const { platform, userindex, tokenlogin, userpasswordold, userpasswordnew } = req.next;
@@ -67,6 +70,7 @@ const updatePasswordProfil = async (req, res) => {
 };
 
 const resetPinProfile = async (req, res) => {
+  res.isnotification = false;
   res.id = uuidv4();
   res.actions = "/user/insert_or_reset_pin";
   const { platform, userindex, tokenlogin, userpinnew, userpassword } = req.next;
@@ -91,6 +95,7 @@ const resetPinProfile = async (req, res) => {
 };
 
 const requestOtpController = async (req, res) => {
+  res.isnotification = false;
   res.id = uuidv4();
   res.actions = "/user/request_otp";
   const resultObj = new ResObjectResult();
@@ -158,6 +163,7 @@ const requestOtpController = async (req, res) => {
 };
 
 const validateOtpController = async (req, res) => {
+  res.isnotification = false;
   res.id = uuidv4();
   res.actions = "/user/validate_otp";
   const resultObj = new ResObjectResult();
@@ -213,6 +219,7 @@ const validateOtpController = async (req, res) => {
 };
 
 const changePhoneNumber = async (req, res) => {
+  res.isnotification = false;
   res.id = uuidv4();
   res.actions = "/user/change_phone_number";
   const resultObj = new ResObjectResult();
@@ -241,6 +248,7 @@ const changePhoneNumber = async (req, res) => {
 };
 
 const insertchangephonenumber = async (req, res) => {
+  res.isnotification = false;
   res.id = uuidv4();
   res.actions = "/user/list_phone_area_code";
   const { userindex } = req.next;
@@ -258,6 +266,7 @@ const insertchangephonenumber = async (req, res) => {
 };
 
 const changeColorController = async (req, res) => {
+  res.isnotification = false;
   res.id = uuidv4();
   res.actions = "/user/change_color_theme";
   const { colorback, colorfront, userindex } = req.next;
