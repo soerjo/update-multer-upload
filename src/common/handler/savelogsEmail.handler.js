@@ -1,8 +1,6 @@
 const EmailsModel = require("../../model/email.model");
-const LogsModel = require("../../model/logs.model");
-const OtpsModel = require("../../model/otp.model");
 
-const saveLogs = async (res, statusCode, statObjRes, error) => {
+const saveLogsEmail = async (res, statusCode, statObjRes, error) => {
   try {
     const method = res.logs.method;
     const url = res.logs.url;
@@ -41,12 +39,10 @@ const saveLogs = async (res, statusCode, statObjRes, error) => {
       },
     };
 
-    LogsModel.create({ ...payload });
-    console.log(`[ ${method} | ${url} | ${statusCode} ] - ${datetime} | ${responsetime}`);
+    return EmailsModel.create({ ...payload });
   } catch (error) {
-    console.error(error);
     throw new Error(error);
   }
 };
 
-module.exports = saveLogs;
+module.exports = saveLogsEmail;

@@ -118,7 +118,6 @@ const requestOtpController = async (req, res) => {
 
     if (new Date() < resSelectUser.tableuserphoneverificationcodenext) {
       const abs = Math.floor(Math.abs(new Date(resSelectUser.tableuserphoneverificationcodenext).getTime() - new Date().getTime()) / 1000);
-      console.log(`${abs} second`);
 
       resultObj.resultstatus = 0;
       resultObj.resultcode = "xxx999999999";
@@ -142,19 +141,19 @@ const requestOtpController = async (req, res) => {
     );
 
     // SEND OTP
-    const resSendOtp = await sendOtp({
+    sendOtp({
       res: res,
       otp: sixRandomNumber,
       phonenumber: resSelectUser.tableuserphonenumber,
     });
 
-    if (!resSendOtp?.status) {
-      resultObj.resultstatus = 0;
-      resultObj.resultcode = "xxx999999999";
-      resultObj.resulterrormessage = resSendOtp?.message;
+    // if (!resSendOtp?.status) {
+    //   resultObj.resultstatus = 0;
+    //   resultObj.resultcode = "xxx999999999";
+    //   resultObj.resulterrormessage = resSendOtp?.message;
 
-      return responseHandler({ res, statusCode: 400, objResponse: resultObj });
-    }
+    //   return responseHandler({ res, statusCode: 400, objResponse: resultObj });
+    // }
 
     return responseHandler({ res, objResponse: resultObj });
   } catch (error) {

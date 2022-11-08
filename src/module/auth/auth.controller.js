@@ -73,7 +73,10 @@ const authStore = async (req, res) => {
   initialusername = initialusername.toUpperCase();
 
   try {
-    let resultselecttokentrans = await execQuery("SELECT count(*) count FROM xxxtempuser WHERE tempusertokentrans = ? AND TIMESTAMPDIFF(SECOND, tempuserinserttimestamp, NOW()) < 900;", [tokentrans]);
+    let resultselecttokentrans = await execQuery(
+      "SELECT count(*) count FROM xxxtempuser WHERE tempusertokentrans = ? AND tempuserindex = '' AND TIMESTAMPDIFF(SECOND, tempuserinserttimestamp, NOW()) < 900;",
+      [tokentrans]
+    );
     resultselecttokentrans = resultselecttokentrans[0];
 
     if (!resultselecttokentrans.count) {
