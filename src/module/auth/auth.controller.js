@@ -11,6 +11,7 @@ const { sendEmail } = require("../email/email.service");
 const NAMESPACE = "AUTH_CONTROLLER";
 
 const authInsertNew = async (req, res) => {
+  res.id = uuidv4();
   res.actions = "/user/registration";
   const { tableuserreferredby } = req.next;
 
@@ -33,11 +34,11 @@ const authDetailId = async (req, res) => {
 
   try {
     let resultspuserdetailid = await execQuery("CALL spxxxuserdetailid(?)", [tokentrans]);
-    resultspuserdetailid = resultspuserdetailid[0][0];
+    resultspuserdetailid = resultspuserdetailid[0];
 
     if (resultspuserdetailid.length <= 0) {
       resObjResult.resultstatus = 0;
-      resObjResult.resultcode = "xxx999999950";
+      resObjResult.resultcode = "xxx999999965";
       resObjResult.resulterrormessage = "NOT FOUND tokentrans";
 
       return responseHandler({ res, statusCode: 404, objResponse: resObjResult });
@@ -68,6 +69,17 @@ const authStore = async (req, res) => {
   initialusername = initialusername.toUpperCase();
 
   try {
+    let isCountryCodeValid = await execQuery("SELECT count(*) count FROM xxxtablecountryphonecode WHERE tablecountryphonecodephonecode = ?;", [userphonecountrycode]);
+    isCountryCodeValid = isCountryCodeValid[0];
+
+    if (!isCountryCodeValid.count) {
+      resultObj.resultstatus = 0;
+      resultObj.resultcode = "xxx999999000";
+      resultObj.resulterrormessage = "country code is not valid";
+
+      return responseHandler({ res, statusCode: 400, objResponse: resultObj });
+    }
+    
     let resultusernameexists = await execQuery("SELECT COUNT (*) AS tableusername FROM xxxtableuser WHERE tableusername = ? AND tableuserisactive = 1", [tableusername]);
     resultusernameexists = resultusernameexists[0];
 
@@ -142,7 +154,7 @@ const authSigninController = async (req, res) => {
   try {
     let resultspuserinsertnew = await execQuery("CALL spxxxauthsignin(?,?,?,?,?,?)", [platform, tableusername, tableuserpassword, latitude, longitude, tableuserlanguage]);
     resultspuserinsertnew = resultspuserinsertnew[0][0];
-
+    console.log(resultspuserinsertnew);
     if (!resultspuserinsertnew.resultstatus) return responseHandler({ res, statusCode: 401, objResponse: resultspuserinsertnew });
 
     let resultspauthlogininfo = await execQuery("CALL spxxxauthlogininfo(?, ?)", [platform, resultspuserinsertnew.resultindex]);

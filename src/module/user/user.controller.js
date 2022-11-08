@@ -219,7 +219,7 @@ const changePhoneNumber = async (req, res) => {
   const { userindex, userphonecountrycode, userphonenumbershort } = req.next;
 
   try {
-    let isCountryCodeValid = await execQuery("SELECT count(*) count FROM xxxtablecountryphonecode WHERE tablecountryphonecodephonecode = ?;", [tempuserphonecountrycode]);
+    let isCountryCodeValid = await execQuery("SELECT count(*) count FROM xxxtablecountryphonecode WHERE tablecountryphonecodephonecode = ?;", [userphonecountrycode]);
     isCountryCodeValid = isCountryCodeValid[0];
 
     if (!isCountryCodeValid.count) {

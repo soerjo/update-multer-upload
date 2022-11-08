@@ -29,7 +29,7 @@ const validateGtoken = async (req, res) => {
       let axiosresponse = handleGtoken(gtoken);
       if (axiosresponse.success != true || axiosresponse.success === undefined) {
         objErrorMessage.code = "xxx999999960";
-        objErrorMessage.errormassage = "xxx999999980 INVALID gtoken";
+        objErrorMessage.errormassage = "xxx999999985 INVALID gtoken";
         objErrorMessage.codevariable = "";
 
         objReturnData.resultstatus = 0;

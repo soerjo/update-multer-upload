@@ -2,60 +2,52 @@ require("dotenv").config();
 const Joi = require("joi");
 
 const defaultSchema = Joi.object({
-  gtoken: Joi.string().required().label("xxx999999980 gtoken"),
+  gtoken: Joi.string().required().label("xxx999999985 gtoken"),
   platform: Joi.string().default("WEBSITE"),
-  signature: Joi.string().required().label("xxx999999955 signature"),
+  signature: Joi.string().required().label("xxx999999980 signature"),
 })
   .required()
   .unknown()
-  .label("xxx999999980 headers");
 
 // INSERT_SCHEMA
 const insertNewSchema = Joi.object({
-  tableuserreferredby: Joi.string().required().label("xxx005190005 referredby"),
+  tableuserreferredby: Joi.string().required().label("xxx005235005 referredby"),
 })
   .required()
-  .label("xxx999999980 body");
+  .label("xxx999999990 body");
 
 // DETAIL_SCHEMA
 const authDetailSchema = Joi.object({
-  tokentrans: Joi.string().required().label("xxx005190005 tokentrans"),
+  tokentrans: Joi.string().required().label("xxx999999965 tokentrans"),
 })
   .required()
-  .label("xxx999999980 body");
+  .label("xxx999999990 body");
 
 // STORE_SCHEMA
 const authStoreSchema = Joi.object({
-  tokentrans: Joi.string().required().label("xxx005190005 tokentrans"),
-  usernameinemail: Joi.string().email().required().label("xxx005190006 usernameinemail"),
+  tokentrans: Joi.string().required().label("xxx999999965 tokentrans"),
+  usernameinemail: Joi.string().email().required().label("xxx005015015 usernameinemail"),
   tableusername: Joi.string()
     .min(5)
     .max(20)
     // .alphanum()
-    .custom((val, helper) => {
-      console.log(val);
-      // if (val.match(/^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$/)) return helper.message("xxx005190005  no _ or . at the beginning");
-      if (!val.substring(0, 1).match(/^[a-zA-Z]+$/)) return helper.message("xxx005190005 start with non alphabet");
-      if (!val.substring(val.length - 1, val.length).match(/^[a-zA-Z]+$/)) return helper.message("xxx005190005 end with non alphabet");
-      return val;
-    })
     .required()
-    .label("xxx005190005 tableusername"),
+    .label("xxx005015005 tableusername"),
   tableuserfullname: Joi.string()
     .min(5)
     .custom((val, helper) => {
-      if (!val.match(/^[a-zA-Z\ ]+$/)) return helper.message("xxx005190005 fullname only allowed alphabet and white space");
-      if (!val.substring(0, 1).match(/^[a-zA-Z]+$/)) return helper.message("xxx005190005 fullname start with non alphabet");
-      if (!val.substring(val.length - 1, val.length).match(/^[a-zA-Z]+$/)) return helper.message("xxx005190005 fullname end with non alphabet");
+      if (!val.match(/^[a-zA-Z\ ]+$/)) return helper.message("xxx005020015 fullname only allowed alphabet and white space");
+      if (!val.substring(0, 1).match(/^[a-zA-Z]+$/)) return helper.message("xxx005020015 fullname start with non alphabet");
+      if (!val.substring(val.length - 1, val.length).match(/^[a-zA-Z]+$/)) return helper.message("xxx005020015 fullname end with non alphabet");
       return val;
     })
     .max(100)
-    .label("xxx005190005 fullname")
+    .label("xxx005020005 fullname")
     .required(),
   userphonecountrycode: Joi.number().required().label("xxx005190005 phonecountrycode"),
   userphonenumbershort: Joi.number()
     .custom((val, helper) => {
-      if (val.toString().length < 7 || val.toString().length > 15) return helper.message("xxx005190005 must beetwen 7 and 15 digits");
+      if (val.toString().length < 6 || val.toString().length > 15) return helper.message("xxx005190005 must beetwen 6 and 15 digits");
       return val;
     })
     .required()
@@ -63,7 +55,7 @@ const authStoreSchema = Joi.object({
   tableuseremail: Joi.string().email().required().label("xxx005190005 email"),
 })
   .required()
-  .label("xxx999999980 body");
+  .label("xxx999999990 body");
 
 // NEWPASSWORD_SCHEMA
 const authNewPasswordSchema = Joi.object({
@@ -80,7 +72,7 @@ const authNewPasswordSchema = Joi.object({
 })
   .required()
   .unknown()
-  .label("xxx999999980 body");
+  .label("xxx999999990 body");
 
 // SIGNIN_SCHEMA
 const signinSchema = Joi.object({
@@ -91,7 +83,7 @@ const signinSchema = Joi.object({
 })
   .required()
   .unknown()
-  .label("xxx999999980 body");
+  .label("xxx999999990 body");
 
 // LOGOUT_SCHEMA
 const logoutSchema = Joi.object({
@@ -99,7 +91,7 @@ const logoutSchema = Joi.object({
 })
   .required()
   .unknown()
-  .label("xxx999999980 body");
+  .label("xxx999999990 body");
 
 // FORGOT_SCHEMA
 const forgotSchema = Joi.object({
@@ -107,7 +99,7 @@ const forgotSchema = Joi.object({
 })
   .required()
   .unknown()
-  .label("xxx999999980 body");
+  .label("xxx999999990 body");
 
 module.exports = {
   defaultSchema,
