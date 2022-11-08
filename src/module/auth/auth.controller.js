@@ -220,30 +220,55 @@ const authSigninController = async (req, res) => {
   try {
     let resultspuserinsertnew = await execQuery("CALL spxxxauthsignin(?,?,?,?,?,?)", [platform, tableusername, tableuserpassword, latitude, longitude, tableuserlanguage]);
     resultspuserinsertnew = resultspuserinsertnew[0][0];
-    console.log(resultspuserinsertnew);
+
+    if (!resultspuserinsertnew.resultindex) return responseHandler({ res, statusCode: 401, objResponse: resultspuserinsertnew });
+
+    let resultSelectUserTable = await execQuery("SELECT * FROM xxxtableuser WHERE tableuserindex = ?;", [resultspuserinsertnew.resultindex]);
+    resultSelectUserTable = resultSelectUserTable[0];
+
+    let idsobj = new IdsObjClass();
+
+    idsobj.id = resultSelectUserTable.tableuserindex;
+    idsobj.description = resultSelectUserTable.tableusername;
+    idsobj.colorback = resultSelectUserTable.tableusercolorback;
+    idsobj.colorfront = resultSelectUserTable.tableusercolorfront;
+    idsobj.imageurl = resultSelectUserTable.tableuserphotourl;
+
+    let userobj = new UserObjClass();
+    userobj.userindex = resultSelectUserTable.tableuserindex;
+    userobj.username = resultSelectUserTable.tableusername;
+    userobj.userfullname = resultSelectUserTable.tableuserfullname;
+    userobj.userinitial = resultSelectUserTable.tableuserinitial;
+    userobj.usercolorback = resultSelectUserTable.tableusercolorback;
+    userobj.userColorfront = resultSelectUserTable.tableusercolorfront;
+    userobj.userphotoprofileurl = resultSelectUserTable.tableuserphotourl;
+
+    res.userobject = userobj;
+    res.ids = [...res.ids, { ...idsobj }];
+
     if (!resultspuserinsertnew.resultstatus) return responseHandler({ res, statusCode: 401, objResponse: resultspuserinsertnew });
 
     let resultspauthlogininfo = await execQuery("CALL spxxxauthlogininfo(?, ?)", [platform, resultspuserinsertnew.resultindex]);
     resultspauthlogininfo = resultspauthlogininfo[0][0];
 
-    const idsobj = new IdsObjClass();
-    idsobj.id = resultspauthlogininfo.tableuserindex;
-    idsobj.description = resultspauthlogininfo.tableusername;
-    idsobj.colorback = resultspauthlogininfo.tableusercolorback;
-    idsobj.colorfront = resultspauthlogininfo.tableusercolorfront;
-    idsobj.imageurl = resultspauthlogininfo.tableuserphotourl;
+    // idsobj = new IdsObjClass();
+    // idsobj.id = resultspauthlogininfo.tableuserindex;
+    // idsobj.description = resultspauthlogininfo.tableusername;
+    // idsobj.colorback = resultspauthlogininfo.tableusercolorback;
+    // idsobj.colorfront = resultspauthlogininfo.tableusercolorfront;
+    // idsobj.imageurl = resultspauthlogininfo.tableuserphotourl;
 
-    const userobj = new UserObjClass();
-    userobj.userindex = resultspauthlogininfo.tableuserindex;
-    userobj.username = resultspauthlogininfo.tableusername;
-    userobj.userfullname = resultspauthlogininfo.tableuserfullname;
-    userobj.userinitial = resultspauthlogininfo.tableuserinitial;
-    userobj.usercolorback = resultspauthlogininfo.tableusercolorback;
-    userobj.userColorfront = resultspauthlogininfo.tableusercolorfront;
-    userobj.userphotoprofileurl = resultspauthlogininfo.tableuserphotourl;
+    // userobj = new UserObjClass();
+    // userobj.userindex = resultspauthlogininfo.tableuserindex;
+    // userobj.username = resultspauthlogininfo.tableusername;
+    // userobj.userfullname = resultspauthlogininfo.tableuserfullname;
+    // userobj.userinitial = resultspauthlogininfo.tableuserinitial;
+    // userobj.usercolorback = resultspauthlogininfo.tableusercolorback;
+    // userobj.userColorfront = resultspauthlogininfo.tableusercolorfront;
+    // userobj.userphotoprofileurl = resultspauthlogininfo.tableuserphotourl;
 
-    res.userobject = userobj;
-    res.ids = [...res.ids, { ...idsobj }];
+    // res.userobject = userobj;
+    // res.ids = [...res.ids, { ...idsobj }];
 
     return responseHandler({ res, objResponse: resultspuserinsertnew, data: resultspauthlogininfo });
   } catch (error) {
@@ -260,6 +285,31 @@ const authLogoutController = async (req, res) => {
   try {
     let resultsplogout = await execQuery("CALL spxxxlogout(?, ?)", [platform, userindex]);
     resultsplogout = resultsplogout[0][0];
+
+    if (!resultsplogout.resultindex) return responseHandler({ res, statusCode: 401, objResponse: resultsplogout });
+
+    let resultSelectUserTable = await execQuery("SELECT * FROM xxxtableuser WHERE tableuserindex = ?;", [resultsplogout.resultindex]);
+    resultSelectUserTable = resultSelectUserTable[0];
+
+    let idsobj = new IdsObjClass();
+
+    idsobj.id = resultSelectUserTable.tableuserindex;
+    idsobj.description = resultSelectUserTable.tableusername;
+    idsobj.colorback = resultSelectUserTable.tableusercolorback;
+    idsobj.colorfront = resultSelectUserTable.tableusercolorfront;
+    idsobj.imageurl = resultSelectUserTable.tableuserphotourl;
+
+    let userobj = new UserObjClass();
+    userobj.userindex = resultSelectUserTable.tableuserindex;
+    userobj.username = resultSelectUserTable.tableusername;
+    userobj.userfullname = resultSelectUserTable.tableuserfullname;
+    userobj.userinitial = resultSelectUserTable.tableuserinitial;
+    userobj.usercolorback = resultSelectUserTable.tableusercolorback;
+    userobj.userColorfront = resultSelectUserTable.tableusercolorfront;
+    userobj.userphotoprofileurl = resultSelectUserTable.tableuserphotourl;
+
+    res.userobject = userobj;
+    res.ids = [...res.ids, { ...idsobj }];
 
     if (!resultsplogout.resultstatus) return responseHandler({ res, statusCode: 409, objResponse: resultsplogout });
 
@@ -278,6 +328,31 @@ const forgotController = async (req, res) => {
   try {
     let resultspforgotpassword = await execQuery("CALL spxxxforgotnamepassword(?)", [tableusername]);
     resultspforgotpassword = resultspforgotpassword[0][0];
+
+    if (!resultspforgotpassword.resultindex) return responseHandler({ res, statusCode: 401, objResponse: resultspforgotpassword });
+
+    let resultSelectUserTable = await execQuery("SELECT * FROM xxxtableuser WHERE tableuserindex = ?;", [resultspforgotpassword.resultindex]);
+    resultSelectUserTable = resultSelectUserTable[0];
+
+    let idsobj = new IdsObjClass();
+
+    idsobj.id = resultSelectUserTable.tableuserindex;
+    idsobj.description = resultSelectUserTable.tableusername;
+    idsobj.colorback = resultSelectUserTable.tableusercolorback;
+    idsobj.colorfront = resultSelectUserTable.tableusercolorfront;
+    idsobj.imageurl = resultSelectUserTable.tableuserphotourl;
+
+    let userobj = new UserObjClass();
+    userobj.userindex = resultSelectUserTable.tableuserindex;
+    userobj.username = resultSelectUserTable.tableusername;
+    userobj.userfullname = resultSelectUserTable.tableuserfullname;
+    userobj.userinitial = resultSelectUserTable.tableuserinitial;
+    userobj.usercolorback = resultSelectUserTable.tableusercolorback;
+    userobj.userColorfront = resultSelectUserTable.tableusercolorfront;
+    userobj.userphotoprofileurl = resultSelectUserTable.tableuserphotourl;
+
+    res.userobject = userobj;
+    res.ids = [...res.ids, { ...idsobj }];
 
     if (!resultspforgotpassword.resultstatus) return responseHandler({ res, statusCode: 409, objResponse: resultspforgotpassword });
 
