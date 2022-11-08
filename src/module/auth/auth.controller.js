@@ -17,11 +17,11 @@ const authInsertNew = async (req, res) => {
   const { tableuserreferredby } = req.next;
 
   try {
-    let resultspuserinsertnew = await execQuery("CALL spxxxuserinsertnew(?)", [tableuserreferredby]);
-    resultspuserinsertnew = resultspuserinsertnew[0][0];
-    if (!resultspuserinsertnew.resultstatus) return responseHandler({ res, statusCode: 404, objResponse: resultspuserinsertnew });
+    let resultspxxxauthsignin = await execQuery("CALL spxxxuserinsertnew(?)", [tableuserreferredby]);
+    resultspxxxauthsignin = resultspxxxauthsignin[0][0];
+    if (!resultspxxxauthsignin.resultstatus) return responseHandler({ res, statusCode: 404, objResponse: resultspxxxauthsignin });
 
-    return responseHandler({ res, objResponse: resultspuserinsertnew });
+    return responseHandler({ res, objResponse: resultspxxxauthsignin });
   } catch (error) {
     throw new Error(error.message);
   }
@@ -57,7 +57,7 @@ const authDetailId = async (req, res) => {
 };
 
 const authStore = async (req, res) => {
-  res.isnotification = true; // NOTIFICATION IT SHOULD BE TRUE
+  res.isnotification = true;
   res.id = uuidv4();
   res.actions = "/user/registration";
   const resObjResult = new ResObjectStats();
@@ -134,25 +134,22 @@ const authStore = async (req, res) => {
 
     if (!resultspuserstore.resultstatus) return responseHandler({ res, statusCode: 409, objResponse: resultspuserstore });
 
-    let resultSelectUserTable = await execQuery("SELECT * FROM xxxtableuser WHERE tableuserindex = ?;", [resultspuserstore.resultindex]);
-    resultSelectUserTable = resultSelectUserTable[0];
-
     const idsobj = new IdsObjClass();
 
-    idsobj.id = resultSelectUserTable.tableuserindex;
-    idsobj.description = resultSelectUserTable.tableusername;
-    idsobj.colorback = resultSelectUserTable.tableusercolorback;
-    idsobj.colorfront = resultSelectUserTable.tableusercolorfront;
-    idsobj.imageurl = resultSelectUserTable.tableuserphotourl;
+    idsobj.id = resultspuserstore.tableuserindex;
+    idsobj.description = resultspuserstore.tableusername;
+    idsobj.colorback = resultspuserstore.tableusercolorback;
+    idsobj.colorfront = resultspuserstore.tableusercolorfront;
+    idsobj.imageurl = resultspuserstore.tableuserphotourl;
 
     const userobj = new UserObjClass();
-    userobj.userindex = resultSelectUserTable.tableuserindex;
-    userobj.username = resultSelectUserTable.tableusername;
-    userobj.userfullname = resultSelectUserTable.tableuserfullname;
-    userobj.userinitial = resultSelectUserTable.tableuserinitial;
-    userobj.usercolorback = resultSelectUserTable.tableusercolorback;
-    userobj.userColorfront = resultSelectUserTable.tableusercolorfront;
-    userobj.userphotoprofileurl = resultSelectUserTable.tableuserphotourl;
+    userobj.userindex = resultspuserstore.tableuserindex;
+    userobj.username = resultspuserstore.tableusername;
+    userobj.userfullname = resultspuserstore.tableuserfullname;
+    userobj.userinitial = resultspuserstore.tableuserinitial;
+    userobj.usercolorback = resultspuserstore.tableusercolorback;
+    userobj.userColorfront = resultspuserstore.tableusercolorfront;
+    userobj.userphotoprofileurl = resultspuserstore.tableuserphotourl;
 
     res.userobject = userobj;
     res.ids = [...res.ids, { ...idsobj }];
@@ -171,7 +168,7 @@ const authStore = async (req, res) => {
 };
 
 const authNewPassword = async (req, res) => {
-  res.isnotification = false;
+  res.isnotification = true;
   res.id = uuidv4();
   res.actions = "/user/register_newpassword";
   const { tableuseremailverificationcode, tableuserpasswordnew } = req.next;
@@ -182,28 +179,32 @@ const authNewPassword = async (req, res) => {
 
     if (!resultspusernewpassword.resultstatus) return responseHandler({ res, statusCode: 404, objResponse: resultspusernewpassword });
 
-    let resultSelectUserTable = await execQuery("SELECT * FROM xxxtableuser WHERE tableuserindex = ?;", [resultspusernewpassword.resultindex]);
-    resultSelectUserTable = resultSelectUserTable[0];
-
     const idsobj = new IdsObjClass();
 
-    idsobj.id = resultSelectUserTable.tableuserindex;
-    idsobj.description = resultSelectUserTable.tableusername;
-    idsobj.colorback = resultSelectUserTable.tableusercolorback;
-    idsobj.colorfront = resultSelectUserTable.tableusercolorfront;
-    idsobj.imageurl = resultSelectUserTable.tableuserphotourl;
+    idsobj.id = resultspusernewpassword?.tableuserindex;
+    idsobj.description = resultspusernewpassword?.tableuserfullname;
+    idsobj.colorback = resultspusernewpassword?.tableusercolorback;
+    idsobj.colorfront = resultspusernewpassword?.tableusercolorfront;
+    idsobj.imageurl = resultspusernewpassword?.tableuserphotourl;
 
     const userobj = new UserObjClass();
-    userobj.userindex = resultSelectUserTable.tableuserindex;
-    userobj.username = resultSelectUserTable.tableusername;
-    userobj.userfullname = resultSelectUserTable.tableuserfullname;
-    userobj.userinitial = resultSelectUserTable.tableuserinitial;
-    userobj.usercolorback = resultSelectUserTable.tableusercolorback;
-    userobj.userColorfront = resultSelectUserTable.tableusercolorfront;
-    userobj.userphotoprofileurl = resultSelectUserTable.tableuserphotourl;
+    userobj.userindex = resultspusernewpassword?.tableuserindex;
+    userobj.username = resultspusernewpassword?.tableusername;
+    userobj.userfullname = resultspusernewpassword?.tableuserfullname;
+    userobj.userinitial = resultspusernewpassword?.tableuserinitial;
+    userobj.usercolorback = resultspusernewpassword?.tableusercolorback;
+    userobj.userColorfront = resultspusernewpassword?.tableusercolorfront;
+    userobj.userphotoprofileurl = resultspusernewpassword?.tableuserphotourl;
 
     res.userobject = userobj;
     res.ids = [...res.ids, { ...idsobj }];
+
+    sendEmail({
+      res: res,
+      useremail: resultspusernewpassword?.resultemail,
+      usernamefull: resultspusernewpassword.tableusername,
+      message: "your password has been changed",
+    });
 
     return responseHandler({ res, objResponse: resultspusernewpassword });
   } catch (error) {
@@ -218,59 +219,36 @@ const authSigninController = async (req, res) => {
   const { platform, tableusername, tableuserpassword, latitude, longitude, tableuserlanguage } = req.next;
 
   try {
-    let resultspuserinsertnew = await execQuery("CALL spxxxauthsignin(?,?,?,?,?,?)", [platform, tableusername, tableuserpassword, latitude, longitude, tableuserlanguage]);
-    resultspuserinsertnew = resultspuserinsertnew[0][0];
+    let resultspxxxauthsignin = await execQuery("CALL spxxxauthsignin(?,?,?,?,?,?)", [platform, tableusername, tableuserpassword, latitude, longitude, tableuserlanguage]);
+    resultspxxxauthsignin = resultspxxxauthsignin[0][0];
 
-    if (!resultspuserinsertnew.resultindex) return responseHandler({ res, statusCode: 401, objResponse: resultspuserinsertnew });
-
-    let resultSelectUserTable = await execQuery("SELECT * FROM xxxtableuser WHERE tableuserindex = ?;", [resultspuserinsertnew.resultindex]);
-    resultSelectUserTable = resultSelectUserTable[0];
+    if (!resultspxxxauthsignin.resultindex) return responseHandler({ res, statusCode: 401, objResponse: resultspxxxauthsignin });
 
     let idsobj = new IdsObjClass();
-
-    idsobj.id = resultSelectUserTable.tableuserindex;
-    idsobj.description = resultSelectUserTable.tableusername;
-    idsobj.colorback = resultSelectUserTable.tableusercolorback;
-    idsobj.colorfront = resultSelectUserTable.tableusercolorfront;
-    idsobj.imageurl = resultSelectUserTable.tableuserphotourl;
+    idsobj.id = resultspxxxauthsignin?.tableuserindex;
+    idsobj.description = resultspxxxauthsignin?.tableuserfullname;
+    idsobj.colorback = resultspxxxauthsignin?.tableusercolorback;
+    idsobj.colorfront = resultspxxxauthsignin?.tableusercolorfront;
+    idsobj.imageurl = resultspxxxauthsignin?.tableuserphotourl;
 
     let userobj = new UserObjClass();
-    userobj.userindex = resultSelectUserTable.tableuserindex;
-    userobj.username = resultSelectUserTable.tableusername;
-    userobj.userfullname = resultSelectUserTable.tableuserfullname;
-    userobj.userinitial = resultSelectUserTable.tableuserinitial;
-    userobj.usercolorback = resultSelectUserTable.tableusercolorback;
-    userobj.userColorfront = resultSelectUserTable.tableusercolorfront;
-    userobj.userphotoprofileurl = resultSelectUserTable.tableuserphotourl;
+    userobj.userindex = resultspxxxauthsignin?.tableuserindex;
+    userobj.username = resultspxxxauthsignin?.tableusername;
+    userobj.userfullname = resultspxxxauthsignin?.tableuserfullname;
+    userobj.userinitial = resultspxxxauthsignin?.tableuserinitial;
+    userobj.usercolorback = resultspxxxauthsignin?.tableusercolorback;
+    userobj.userColorfront = resultspxxxauthsignin?.tableusercolorfront;
+    userobj.userphotoprofileurl = resultspxxxauthsignin?.tableuserphotourl;
 
     res.userobject = userobj;
     res.ids = [...res.ids, { ...idsobj }];
 
-    if (!resultspuserinsertnew.resultstatus) return responseHandler({ res, statusCode: 401, objResponse: resultspuserinsertnew });
+    if (!resultspxxxauthsignin.resultstatus) return responseHandler({ res, statusCode: 401, objResponse: resultspxxxauthsignin });
 
-    let resultspauthlogininfo = await execQuery("CALL spxxxauthlogininfo(?, ?)", [platform, resultspuserinsertnew.resultindex]);
+    let resultspauthlogininfo = await execQuery("CALL spxxxauthlogininfo(?, ?)", [platform, resultspxxxauthsignin.resultindex]);
     resultspauthlogininfo = resultspauthlogininfo[0][0];
 
-    // idsobj = new IdsObjClass();
-    // idsobj.id = resultspauthlogininfo.tableuserindex;
-    // idsobj.description = resultspauthlogininfo.tableusername;
-    // idsobj.colorback = resultspauthlogininfo.tableusercolorback;
-    // idsobj.colorfront = resultspauthlogininfo.tableusercolorfront;
-    // idsobj.imageurl = resultspauthlogininfo.tableuserphotourl;
-
-    // userobj = new UserObjClass();
-    // userobj.userindex = resultspauthlogininfo.tableuserindex;
-    // userobj.username = resultspauthlogininfo.tableusername;
-    // userobj.userfullname = resultspauthlogininfo.tableuserfullname;
-    // userobj.userinitial = resultspauthlogininfo.tableuserinitial;
-    // userobj.usercolorback = resultspauthlogininfo.tableusercolorback;
-    // userobj.userColorfront = resultspauthlogininfo.tableusercolorfront;
-    // userobj.userphotoprofileurl = resultspauthlogininfo.tableuserphotourl;
-
-    // res.userobject = userobj;
-    // res.ids = [...res.ids, { ...idsobj }];
-
-    return responseHandler({ res, objResponse: resultspuserinsertnew, data: resultspauthlogininfo });
+    return responseHandler({ res, objResponse: resultspxxxauthsignin, data: resultspauthlogininfo });
   } catch (error) {
     throw new Error(error.message);
   }
@@ -286,32 +264,28 @@ const authLogoutController = async (req, res) => {
     let resultsplogout = await execQuery("CALL spxxxlogout(?, ?)", [platform, userindex]);
     resultsplogout = resultsplogout[0][0];
 
-    if (!resultsplogout.resultindex) return responseHandler({ res, statusCode: 401, objResponse: resultsplogout });
-
-    let resultSelectUserTable = await execQuery("SELECT * FROM xxxtableuser WHERE tableuserindex = ?;", [resultsplogout.resultindex]);
-    resultSelectUserTable = resultSelectUserTable[0];
+    if (!resultsplogout?.resultindex) return responseHandler({ res, statusCode: 401, objResponse: resultsplogout });
 
     let idsobj = new IdsObjClass();
-
-    idsobj.id = resultSelectUserTable.tableuserindex;
-    idsobj.description = resultSelectUserTable.tableusername;
-    idsobj.colorback = resultSelectUserTable.tableusercolorback;
-    idsobj.colorfront = resultSelectUserTable.tableusercolorfront;
-    idsobj.imageurl = resultSelectUserTable.tableuserphotourl;
+    idsobj.id = resultsplogout?.tableuserindex;
+    idsobj.description = resultsplogout?.tableuserfullname;
+    idsobj.colorback = resultsplogout?.tableusercolorback;
+    idsobj.colorfront = resultsplogout?.tableusercolorfront;
+    idsobj.imageurl = resultsplogout?.tableuserphotourl;
 
     let userobj = new UserObjClass();
-    userobj.userindex = resultSelectUserTable.tableuserindex;
-    userobj.username = resultSelectUserTable.tableusername;
-    userobj.userfullname = resultSelectUserTable.tableuserfullname;
-    userobj.userinitial = resultSelectUserTable.tableuserinitial;
-    userobj.usercolorback = resultSelectUserTable.tableusercolorback;
-    userobj.userColorfront = resultSelectUserTable.tableusercolorfront;
-    userobj.userphotoprofileurl = resultSelectUserTable.tableuserphotourl;
+    userobj.userindex = resultsplogout?.tableuserindex;
+    userobj.username = resultsplogout?.tableusername;
+    userobj.userfullname = resultsplogout?.tableuserfullname;
+    userobj.userinitial = resultsplogout?.tableuserinitial;
+    userobj.usercolorback = resultsplogout?.tableusercolorback;
+    userobj.userColorfront = resultsplogout?.tableusercolorfront;
+    userobj.userphotoprofileurl = resultsplogout?.tableuserphotourl;
 
     res.userobject = userobj;
     res.ids = [...res.ids, { ...idsobj }];
 
-    if (!resultsplogout.resultstatus) return responseHandler({ res, statusCode: 409, objResponse: resultsplogout });
+    if (!resultsplogout?.resultstatus) return responseHandler({ res, statusCode: 409, objResponse: resultsplogout });
 
     return responseHandler({ res, objResponse: resultsplogout });
   } catch (error) {
@@ -320,7 +294,7 @@ const authLogoutController = async (req, res) => {
 };
 
 const forgotController = async (req, res) => {
-  res.isnotification = false;
+  res.isnotification = true;
   res.id = uuidv4();
   res.actions = "/user/request_forgot_password";
   const { tableusername } = req.next;
@@ -331,35 +305,31 @@ const forgotController = async (req, res) => {
 
     if (!resultspforgotpassword.resultindex) return responseHandler({ res, statusCode: 401, objResponse: resultspforgotpassword });
 
-    let resultSelectUserTable = await execQuery("SELECT * FROM xxxtableuser WHERE tableuserindex = ?;", [resultspforgotpassword.resultindex]);
-    resultSelectUserTable = resultSelectUserTable[0];
-
     let idsobj = new IdsObjClass();
-
-    idsobj.id = resultSelectUserTable.tableuserindex;
-    idsobj.description = resultSelectUserTable.tableusername;
-    idsobj.colorback = resultSelectUserTable.tableusercolorback;
-    idsobj.colorfront = resultSelectUserTable.tableusercolorfront;
-    idsobj.imageurl = resultSelectUserTable.tableuserphotourl;
+    idsobj.id = resultspforgotpassword.tableuserindex;
+    idsobj.description = resultspforgotpassword.tableuserfullname;
+    idsobj.colorback = resultspforgotpassword.tableusercolorback;
+    idsobj.colorfront = resultspforgotpassword.tableusercolorfront;
+    idsobj.imageurl = resultspforgotpassword.tableuserphotourl;
 
     let userobj = new UserObjClass();
-    userobj.userindex = resultSelectUserTable.tableuserindex;
-    userobj.username = resultSelectUserTable.tableusername;
-    userobj.userfullname = resultSelectUserTable.tableuserfullname;
-    userobj.userinitial = resultSelectUserTable.tableuserinitial;
-    userobj.usercolorback = resultSelectUserTable.tableusercolorback;
-    userobj.userColorfront = resultSelectUserTable.tableusercolorfront;
-    userobj.userphotoprofileurl = resultSelectUserTable.tableuserphotourl;
+    userobj.userindex = resultspforgotpassword.tableuserindex;
+    userobj.username = resultspforgotpassword.tableusername;
+    userobj.userfullname = resultspforgotpassword.tableuserfullname;
+    userobj.userinitial = resultspforgotpassword.tableuserinitial;
+    userobj.usercolorback = resultspforgotpassword.tableusercolorback;
+    userobj.userColorfront = resultspforgotpassword.tableusercolorfront;
+    userobj.userphotoprofileurl = resultspforgotpassword.tableuserphotourl;
 
     res.userobject = userobj;
     res.ids = [...res.ids, { ...idsobj }];
 
     if (!resultspforgotpassword.resultstatus) return responseHandler({ res, statusCode: 409, objResponse: resultspforgotpassword });
 
-    await sendEmail({
+    sendEmail({
       res: res,
       useremail: resultspforgotpassword.resultemail,
-      usernamefull: tableusername,
+      usernamefull: resultspforgotpassword.tableuserfullname,
       message: resultspforgotpassword.resultemailverificationcode,
     });
 

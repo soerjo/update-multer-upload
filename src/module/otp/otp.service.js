@@ -4,7 +4,7 @@ const saveLogsOtp = require("../../common/handler/savelogsOtp.handler");
 const ApiResponseObj = require("../../common/objClass/ApiResObj.class");
 
 const sendOtp = async ({ res, otp, phonenumber }) => {
-  res.actions = [res.actions, "/otp"];
+  // res.actions = [res.actions, "/otp"];
   const apiObj = new ApiResponseObj();
 
   try {

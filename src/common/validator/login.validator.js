@@ -13,7 +13,7 @@ const validateLogin = async (req, res) => {
 
   const idsobj = new IdsObjClass();
   idsobj.id = checkuser.data.tableuserindex;
-  idsobj.description = checkuser.data.tableusername;
+  idsobj.description = checkuser.data.tableuserfullname;
   idsobj.colorback = checkuser.data.tableusercolorback;
   idsobj.colorfront = checkuser.data.tableusercolorfront;
   idsobj.imageurl = checkuser.data.tableuserphotourl;

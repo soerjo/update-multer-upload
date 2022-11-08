@@ -4,7 +4,7 @@ const saveLogsEmail = require("../../common/handler/savelogsEmail.handler");
 const ApiResponseObj = require("../../common/objClass/ApiResObj.class");
 
 const sendEmail = async ({ res, useremail, usernamefull, message }) => {
-  res.actions = [res.actions, "/email"];
+  // res.actions = [res.actions, "/email"];
   const apiObj = new ApiResponseObj();
 
   try {
@@ -25,13 +25,22 @@ const sendEmail = async ({ res, useremail, usernamefull, message }) => {
         },
       }
     );
+
     apiObj.apiName = "call Email api";
     apiObj.timeStamp = new Date().getTime();
     apiObj.response = resMail.data;
   } catch (error) {
+    const logsError = {
+      status: error.response?.status,
+      statusText: error.response?.statusText,
+      method: error.response.config?.method,
+      url: error.response.config?.url,
+      data: error.response.config?.data,
+      bodyresponse: error.response?.data,
+    };
     apiObj.apiName = "call email api";
     apiObj.timeStamp = new Date().getTime();
-    apiObj.response = error.response.data;
+    apiObj.response = logsError;
   }
 
   res.apiresponse = [...res.apiresponse, apiObj];
