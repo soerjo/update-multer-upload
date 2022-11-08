@@ -8,7 +8,7 @@ const validatorHeaders = (schema) => async (req, res) => {
 
   try {
     const { error, value } = await schema.validate(req.headers, { abortEarly: false });
-
+    
     const {
       host,
       accept,
@@ -21,21 +21,23 @@ const validatorHeaders = (schema) => async (req, res) => {
       "content-length": contentlength,
       ...resheaders
     } = value;
-
+    
     if (error) {
-      objReturnData.resultstatus = error && 0;
+      console.log(error)
+      objReturnData.resultstatus = 0;
       objReturnData.resultmessage =
-        error &&
+        // error &&
         error.details.map((err) => {
+          // console.log(err)
           const objErrorMessage = new ErrorMessageObj();
 
           objErrorMessage.code = err.message.replace(/\"/g, "").substring(0, 12);
           objErrorMessage.errormassage = err.message.replace(/\"/g, "");
           objErrorMessage.codevariable = "";
-
+console.log(objErrorMessage);
           return { ...objErrorMessage };
         });
-
+console.log(objReturnData.resultmessage);
       return responseHandler({ res, statusCode: 400, objResponse: objReturnData });
     }
 

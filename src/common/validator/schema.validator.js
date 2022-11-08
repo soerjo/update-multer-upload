@@ -8,7 +8,7 @@ const validator = (schema) => async (req, res) => {
 
   if (!req.body) {
     objReturnData.resultstatus = 0;
-    objReturnData.resultcode = "xxx999999960";
+    objReturnData.resultcode = "xxx999999990";
     objReturnData.resulterrormessage = "body is not found";
 
     return responseHandler({ res, statusCode: 400, objResponse: objReturnData });

@@ -9,7 +9,7 @@ const sendEmail = async ({ res, useremail, usernamefull, message }) => {
 
   try {
     const resMail = await axios.post(
-      "https://email-portal.6mbr.com/api/sendmailfdafdsa",
+      "https://email-portal.6mbr.com/api/sendmail",
       {
         email: useremail,
         from: "noreply@dhita.net",
