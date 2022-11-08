@@ -57,7 +57,7 @@ const authDetailId = async (req, res) => {
 };
 
 const authStore = async (req, res) => {
-  res.isnotification = false;
+  res.isnotification = true; // NOTIFICATION IT SHOULD BE TRUE
   res.id = uuidv4();
   res.actions = "/user/registration";
   const resObjResult = new ResObjectStats();
@@ -181,6 +181,29 @@ const authNewPassword = async (req, res) => {
     resultspusernewpassword = resultspusernewpassword[0][0];
 
     if (!resultspusernewpassword.resultstatus) return responseHandler({ res, statusCode: 404, objResponse: resultspusernewpassword });
+
+    let resultSelectUserTable = await execQuery("SELECT * FROM xxxtableuser WHERE tableuserindex = ?;", [resultspusernewpassword.resultindex]);
+    resultSelectUserTable = resultSelectUserTable[0];
+
+    const idsobj = new IdsObjClass();
+
+    idsobj.id = resultSelectUserTable.tableuserindex;
+    idsobj.description = resultSelectUserTable.tableusername;
+    idsobj.colorback = resultSelectUserTable.tableusercolorback;
+    idsobj.colorfront = resultSelectUserTable.tableusercolorfront;
+    idsobj.imageurl = resultSelectUserTable.tableuserphotourl;
+
+    const userobj = new UserObjClass();
+    userobj.userindex = resultSelectUserTable.tableuserindex;
+    userobj.username = resultSelectUserTable.tableusername;
+    userobj.userfullname = resultSelectUserTable.tableuserfullname;
+    userobj.userinitial = resultSelectUserTable.tableuserinitial;
+    userobj.usercolorback = resultSelectUserTable.tableusercolorback;
+    userobj.userColorfront = resultSelectUserTable.tableusercolorfront;
+    userobj.userphotoprofileurl = resultSelectUserTable.tableuserphotourl;
+
+    res.userobject = userobj;
+    res.ids = [...res.ids, { ...idsobj }];
 
     return responseHandler({ res, objResponse: resultspusernewpassword });
   } catch (error) {
