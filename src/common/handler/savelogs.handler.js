@@ -1,3 +1,4 @@
+const EmailsModel = require("../../model/email.model");
 const LogsModel = require("../../model/logs.model");
 
 const saveLogs = async (res, statusCode, statObjRes, error) => {
@@ -41,11 +42,19 @@ const saveLogs = async (res, statusCode, statObjRes, error) => {
     };
 
     // console.log(payload);
-    if (res.actions !== "/actifity/lists") {
-      LogsModel.create({ ...payload });
+    switch (res.action) {
+      case "/email":
+        EmailsModel.create({ ...payload });
+        break;
+      case "/actifity/lists":
+        break;
+      default:
+        LogsModel.create({ ...payload });
+        break;
     }
   } catch (error) {
     console.error(error);
+    throw new Error(error);
   }
 };
 

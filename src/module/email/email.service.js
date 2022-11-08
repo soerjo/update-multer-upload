@@ -1,7 +1,9 @@
 const axios = require("axios");
+const saveLogs = require("../../common/handler/savelogs.handler");
 const ApiResponseObj = require("../../common/objClass/ApiResObj.class");
 
 const sendEmail = async ({ res, useremail, usernamefull, message }) => {
+  res.actions = "/email";
   const apiObj = new ApiResponseObj();
 
   try {
@@ -24,12 +26,15 @@ const sendEmail = async ({ res, useremail, usernamefull, message }) => {
     );
     apiObj.apiName = "call email api";
     apiObj.timeStamp = new Date().getTime();
-    apiObj.response = resMail.data;
+    apiObj.response = resMail;
   } catch (error) {
-    console.log(error);
+    apiObj.apiName = "call email api";
+    apiObj.timeStamp = new Date().getTime();
+    apiObj.response = error.response;
   }
 
   res.apiresponse = [...res.apiresponse, apiObj];
+  saveLogs(res);
 };
 
 module.exports = { sendEmail };

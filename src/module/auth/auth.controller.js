@@ -73,15 +73,26 @@ const authStore = async (req, res) => {
   initialusername = initialusername.toUpperCase();
 
   try {
+    let resultselecttokentrans = await execQuery("SELECT count(*) count FROM xxxtempuser WHERE tempusertokentrans = ? AND TIMESTAMPDIFF(SECOND, tempuserinserttimestamp, NOW()) < 900;", [tokentrans]);
+    resultselecttokentrans = resultselecttokentrans[0];
+
+    if (!resultselecttokentrans.count) {
+      resObjResult.resultstatus = 0;
+      resObjResult.resultcode = "xxx999999000";
+      resObjResult.resulterrormessage = "token trans not valid";
+
+      return responseHandler({ res, statusCode: 400, objResponse: resObjResult });
+    }
+
     let isCountryCodeValid = await execQuery("SELECT count(*) count FROM xxxtablecountryphonecode WHERE tablecountryphonecodephonecode = ?;", [userphonecountrycode]);
     isCountryCodeValid = isCountryCodeValid[0];
 
     if (!isCountryCodeValid.count) {
-      resultObj.resultstatus = 0;
-      resultObj.resultcode = "xxx999999000";
-      resultObj.resulterrormessage = "country code is not valid";
+      resObjResult.resultstatus = 0;
+      resObjResult.resultcode = "xxx999999000";
+      resObjResult.resulterrormessage = "country code is not valid";
 
-      return responseHandler({ res, statusCode: 400, objResponse: resultObj });
+      return responseHandler({ res, statusCode: 400, objResponse: resObjResult });
     }
 
     let resultusernameexists = await execQuery("SELECT COUNT (*) AS tableusername FROM xxxtableuser WHERE tableusername = ? AND tableuserisactive = 1", [tableusername]);
