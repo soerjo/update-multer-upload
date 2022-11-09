@@ -33,17 +33,17 @@ const profileSchema = Joi.object({}).unknown().label("xxx999999990 body");
 // UPDATE_PROFILE
 const changeUsernameSchema = Joi.object({
   usernameinemail: Joi.string().email().required().label("xxx005015015 usernameinemail").messages({
-    "string.base": `"xxx005015005" e user name should be a type of 'text'`,
-    "string.email": `"xxx005015005" e user name is not valid'`,
-    "string.min": `"xxx005015005" e user name  length should more than 5 character`,
-    "string.max": `"xxx005015005" e user name  length should less than 20 character`,
+    "string.base": `"xxx005015030" e user name is not valid`,
+    "string.email": `"xxx005015030" e user name is not valid'`,
+    "string.min": `"xxx005015020" e user name  length should more than 5 character`,
+    "string.max": `"xxx005015025" e user name  length should less than 20 character`,
     "string.empty": `"xxx005015005" e please provide user name`,
     "any.required": `"xxx005015005" e please provide user name`,
   }),
   tableusername: Joi.string().min(5).max(20).required().label("xxx005015005 tableusername").messages({
-    "string.base": `"xxx005015005" user name should be a type of 'text'`,
-    "string.min": `"xxx005015005" user name  length should more than 5 character`,
-    "string.max": `"xxx005015005" user name  length should less than 20 character`,
+    "string.base": `"xxx005015030" user name is not valid`,
+    "string.min": `"xxx005015020" e user name  length should more than 5 character`,
+    "string.max": `"xxx005015025" e user name  length should less than 20 character`,
     "string.empty": `"xxx005015005" please provide user name`,
     "any.required": `"xxx005015005" please provide user name`,
   }),
@@ -63,9 +63,9 @@ const updatePasswordProfileSchema = Joi.object({
     .required()
     .label("xxx005116005 tableuserpasswordnew")
     .messages({
-      "string.min": `"xxx005116005" old password length should more than 5 character`,
-      "string.max": `"xxx005116005" old password length should less than 20 character`,
-      "string.base": `"xxx005116005" old password should be a type of 'text'`,
+      "string.min": `"xxx005116020" old password length should more than 8 character`,
+      "string.max": `"xxx005116025" old password length should less than 16 character`,
+      "string.base": `"xxx005116010" old password is not valid`,
       "string.empty": `"xxx005116005" please provide old password`,
       "any.required": `"xxx005116005" please provide old password`,
     }),
@@ -79,9 +79,9 @@ const updatePasswordProfileSchema = Joi.object({
     .required()
     .label("xxx005117005 tableuserpasswordnew")
     .messages({
-      "string.min": `"xxx005117005" new password length should more than 5 character`,
-      "string.max": `"xxx005117005" new password length should less than 20 character`,
-      "string.base": `"xxx005117005" new password should be a type of 'text'`,
+      "string.min": `"xxx005117020" new password length should more than 8 character`,
+      "string.max": `"xxx005117025" new password length should less than 16 character`,
+      "string.base": `"xxx005117010" new password is not valid`,
       "string.empty": `"xxx005117005" please provide new password`,
       "any.required": `"xxx005117005" please provide new password`,
     }),
@@ -99,16 +99,16 @@ const changecolorSchema = Joi.object({
 
 const resetPinProfileSchema = Joi.object({
   userpinnew: Joi.string().min(6).max(6).required().label("xxx005200005 pin").messages({
-    "string.base": `"xxx005200005" pin should be a type of 'text'`,
-    "string.min": `"xxx005200005" pin length should more than 5 character`,
-    "string.max": `"xxx005200005" pin length should less than 20 character`,
+    "string.base": `"xxx005200010" pin is not valid`,
+    "string.min": `"xxx005200005" pin length must 6 character`,
+    "string.max": `"xxx005200005" pin length must 6 character`,
     "string.empty": `"xxx005200005" please provide pin`,
     "any.required": `"xxx005200005" please provide pin`,
   }),
   userpassword: Joi.string().min(5).max(100).required().label("xxx005115005 password").messages({
-    "string.base": `"xxx005115005" password should be a type of 'text'`,
-    "string.min": `"xxx005115005" password length should more than 5 character`,
-    "string.max": `"xxx005115005" password length should less than 20 character`,
+    "string.base": `"xxx005115010" password is not valid it should string`,
+    "string.min": `"xxx005115020" password length should more than 5 character`,
+    "string.max": `"xxx005115025" password length should less than 20 character`,
     "string.empty": `"xxx005115005" please provide new password`,
     "any.required": `"xxx005115005" please provide new password`,
   }),
@@ -120,8 +120,8 @@ const resetPinProfileSchema = Joi.object({
 const trigerOtpSchema = Joi.object({}).required().unknown().label("xxx999999990 body");
 
 const validateOtpSchema = Joi.object({
-  otp: Joi.string().min(5).max(16).required().label("xxx005095005 otp").messages({
-    "string.base": `"xxx005095005" otp should be a type of 'string'`,
+  otp: Joi.string().required().label("xxx005095005 otp").messages({
+    "string.base": `"xxx005095015" the otp is not valid`,
     "string.empty": `"xxx005095005" please provide otp`,
     "any.required": `"xxx005095005" please provide otp`,
   }),
@@ -132,7 +132,7 @@ const validateOtpSchema = Joi.object({
 
 const changePhoneNumberSchema = Joi.object({
   userphonecountrycode: Joi.number().required().label("xxx025015005 phonecountrycode").messages({
-    "number.base": `"xxx025015005" phone country code should be a type of 'number'`,
+    "number.base": `"xxx025015010" phone country code is not valid it should type of 'number'`,
     "number.empty": `"xxx025015005" please provide phone country code`,
     "any.required": `"xxx025015005" please provide phone country code`,
   }),
@@ -145,7 +145,7 @@ const changePhoneNumberSchema = Joi.object({
     .required()
     .label("xxx005060005 phonenumbershort")
     .messages({
-      "number.base": `"xxx005060005" phone number short should be a type of 'number'`,
+      "number.base": `"xxx005060010" phone number short is not valid it should type of 'number'`,
       "number.empty": `"xxx005060005" please provide phone number short`,
       "any.required": `"xxx005060005" please provide phone number short`,
     }),
@@ -158,13 +158,6 @@ const insertPhoneNumberSchema = Joi.object({}).required().unknown().label("xxx99
 
 module.exports = {
   defaultSchema,
-  // insertNewSchema,
-  // authDetailSchema,
-  // authStoreSchema,
-  // authNewPasswordSchema,
-  // signinSchema,
-  // logoutSchema,
-  // forgotSchema,
   profileSchema,
   changeUsernameSchema,
   updatePasswordProfileSchema,

@@ -116,13 +116,16 @@ const requestOtpController = async (req, res) => {
       return responseHandler({ res, statusCode: 400, objResponse: resultObj });
     }
 
+    console.log(new Date(), resSelectUser.tableuserphoneverificationcodenext, new Date() < resSelectUser.tableuserphoneverificationcodenext)
     if (new Date() < resSelectUser.tableuserphoneverificationcodenext) {
+      console.log('HERE')
       const abs = Math.floor(Math.abs(new Date(resSelectUser.tableuserphoneverificationcodenext).getTime() - new Date().getTime()) / 1000);
 
       resultObj.resultstatus = 0;
       resultObj.resultcode = "xxx999999945";
-      resultObj.resulterrormessage = "you can not request otp for ### second";
+      resultObj.resulterrormessage = "you can not request otp for next ### second";
       resultObj.resultcodevariable = abs;
+      // resultObj.resultcodevariable = new Date(resSelectUser.tableuserphoneverificationcodenext).getTime()
 
       return responseHandler({ res, statusCode: 400, objResponse: resultObj });
     }
@@ -132,11 +135,11 @@ const requestOtpController = async (req, res) => {
       sixRandomNumber += Math.floor(Math.random() * 10);
     }
     let date = new Date();
-    let codeOtpExpire = new Date(date.getTime() + 60000);
-    let codeOtpNextRequest = new Date(date.getTime() + Math.pow(2, resSelectUser.tableuserphonenumberfailedattempt) * 3000);
+    let codeOtpExpire = new Date(date.getTime() + 5 * 60 * 1000);
+    let codeOtpNextRequest = new Date(date.getTime() + Math.pow(2, resSelectUser.tableuserphonenumberfailedattempt) * 30 * 1000);
 
     await execQuery(
-      "UPDATE	xxxtableuser SET tableuserphoneverificationcode = ?, tableuserphoneverificationcodetimestamp = ?, tableuserphoneverificationcodeexpiry = ?, tableuserphoneverificationcodenext= ?  WHERE tableuserindex = ?;",
+      "UPDATE	xxxtableuser SET tableuserphonenumberfailedattempt = tableuserphonenumberfailedattempt + 1, tableuserphoneverificationcode = ?, tableuserphoneverificationcodetimestamp = ?, tableuserphoneverificationcodeexpiry = ?, tableuserphoneverificationcodenext= ?  WHERE tableuserindex = ?;",
       [sixRandomNumber, new Date(), codeOtpExpire, codeOtpNextRequest, userindex]
     );
 
@@ -182,23 +185,22 @@ const validateOtpController = async (req, res) => {
       return responseHandler({ res, statusCode: 400, objResponse: resultObj });
     }
 
-    if (resSelectUser.tableuserphonenumberfailedattempt > 2) {
-      await execQuery(`CALL spxxxsuspendotp(?)`, [userindex]);
-    }
-
     if (resSelectUser.tableuserphoneverificationcode !== otp) {
       resultObj.resultstatus = 0;
       resultObj.resultcode = "xxx005095015";
       resultObj.resulterrormessage = "the otp is not valid";
 
-      if (resSelectUser.tableuserphonenumberfailedattempt < 3) {
+      // if (resSelectUser.tableuserphonenumberfailedattempt < 3) {
         const failedatempotpcount = resSelectUser.tableuserphonenumberfailedattempt + 1;
         await execQuery("UPDATE	xxxtableuser SET tableuserphonenumberfailedattempt = ?, tableuserphonenumberfailedattemptlast = ? WHERE tableuserindex = ?;", [
           failedatempotpcount,
           new Date(),
           userindex,
         ]);
-      }
+        if( failedatempotpcount > 5) {
+          await execQuery(`CALL spxxxsuspendotp(?)`, [userindex]);
+        }
+      // }
 
       return responseHandler({ res, statusCode: 400, objResponse: resultObj });
     }
@@ -212,8 +214,8 @@ const validateOtpController = async (req, res) => {
     }
 
     await execQuery(
-      "UPDATE	xxxtableuser SET tableuserphonenumberisverified = ?, tableuserphonenumberisverifiedtimestamp = ?, tableuserphonenumberfailedattempt = ?, tableuserphonenumberfailedattemptlast = ? WHERE tableuserindex = ?;",
-      [true, new Date(), 0, new Date(), userindex]
+      "UPDATE	xxxtableuser SET tableuserphoneverificationcodenext = ?, tableuserphonenumberisverified = ?, tableuserphonenumberisverifiedtimestamp = ?, tableuserphonenumberfailedattempt = ?, tableuserphonenumberfailedattemptlast = ? WHERE tableuserindex = ?;",
+      [ new Date(), true, new Date(), 0, new Date(), userindex]
     );
 
     return responseHandler({ res });

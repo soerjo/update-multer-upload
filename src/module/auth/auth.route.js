@@ -9,7 +9,7 @@ const validatorHeaders = require("../../common/validator/headers.validator");
 const namespace = "AUTH ROUTES";
 
 const customValidateStore = async (req) => {
-  req.body.usernameinemail = req.body.tableusername + "@gmail.com";
+  if(req.body){   req.body.usernameinemail = req?.body.tableusername + "@gmail.com"; }
 };
 
 async function authRoutes(fastify) {

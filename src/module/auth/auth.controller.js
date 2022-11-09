@@ -31,9 +31,9 @@ const authDetailId = async (req, res) => {
 
   try {
     let resultspuserdetailid = await execQuery("CALL spxxxuserdetailid(?)", [tokentrans]);
-    resultspuserdetailid = resultspuserdetailid[0];
+    resultspuserdetailid = resultspuserdetailid[0][0];
 
-    if (resultspuserdetailid.length <= 0) {
+    if (!resultspuserdetailid) {
       resObjResult.resultstatus = 0;
       resObjResult.resultcode = "xxx035020015";
       resObjResult.resulterrormessage = "tokentrans is not found";

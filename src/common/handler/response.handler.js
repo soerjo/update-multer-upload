@@ -52,7 +52,7 @@ const responseHandler = ({ res, statusCode = 200, objResponse, data, support, er
   }
 
   if (error) console.error(error);
-  saveLogs(res, statusCode, statObjRes);
+  saveLogs(res, statusCode, {statObjRes, data, support });
 
   return res.status(statusCode).send({ status: statObjRes, data: data, support });
 };
