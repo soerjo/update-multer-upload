@@ -73,7 +73,7 @@ const updatePasswordProfileSchema = Joi.object({
     .min(8)
     .max(16)
     .custom((val, helper) => {
-      if (!val.match(/^[0-9a-zA-Z\.\-\_\$\&\#\@\!\*\(\)]+$/)) return helper.message("xxx005190005 only allowed alphanumeric and . - _");
+      if (!val.match(/^[0-9a-zA-Z\.\-\_\$\&\#\@\!\*\(\)]+$/)) return helper.message("xxx005117005 only allowed alphanumeric and . - _");
       return val;
     })
     .required()
@@ -91,7 +91,7 @@ const updatePasswordProfileSchema = Joi.object({
   .label("xxx999999990 body");
 
 const changecolorSchema = Joi.object({
-  color: Joi.string().min(5).max(7).required().label("xxx005190005 color"),
+  // color: Joi.string().min(5).max(7).required().label("xxx005190005 color"),
 })
   .required()
   .unknown()
@@ -120,7 +120,11 @@ const resetPinProfileSchema = Joi.object({
 const trigerOtpSchema = Joi.object({}).required().unknown().label("xxx999999990 body");
 
 const validateOtpSchema = Joi.object({
-  otp: Joi.string().min(5).max(16).required().label("xxx005190005 otp"),
+  otp: Joi.string().min(5).max(16).required().label("xxx005095005 otp").messages({
+    "string.base": `"xxx005095005" otp should be a type of 'string'`,
+    "string.empty": `"xxx005095005" please provide otp`,
+    "any.required": `"xxx005095005" please provide otp`,
+  }),
 })
   .required()
   .unknown()
@@ -135,11 +139,11 @@ const changePhoneNumberSchema = Joi.object({
   userphonenumbershort: Joi.number()
     .custom((val, helper) => {
       console.log(val.toString());
-      if (val.toString().length < 7 || val.toString().length > 15) return helper.message("xxx005190005 must beetwen 7 and 15 digits");
+      if (val.toString().length < 7 || val.toString().length > 15) return helper.message("xxx005060005 must beetwen 7 and 15 digits");
       return val;
     })
     .required()
-    .label("xxx005190005 phonenumbershort")
+    .label("xxx005060005 phonenumbershort")
     .messages({
       "number.base": `"xxx005060005" phone number short should be a type of 'number'`,
       "number.empty": `"xxx005060005" please provide phone number short`,

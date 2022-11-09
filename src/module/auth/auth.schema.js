@@ -103,7 +103,7 @@ const authStoreSchema = Joi.object({
       return val;
     })
     .required()
-    .label("xxx005190005 phonenumbershort")
+    .label("xxx005060005 phonenumbershort")
     .messages({
       "number.base": `"xxx005060005" phone number short should be a type of 'number'`,
       "number.empty": `"xxx005060005" please provide phone number short`,
