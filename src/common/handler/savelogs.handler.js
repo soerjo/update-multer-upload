@@ -21,7 +21,7 @@ const saveLogs = async (res, statusCode, statObjRes, error) => {
       responsetime: responsetime,
 
       ...res.logs,
-      timestamp: new Date().getTime(),
+      timestamp: res.logs?.timestamp || new Date().getTime(),
 
       userindex: res.userobject?.userindex || "",
       username: res.userobject?.username || "",

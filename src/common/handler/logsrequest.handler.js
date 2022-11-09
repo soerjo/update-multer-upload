@@ -13,6 +13,7 @@ const logsrequest = async (req, res) => {
     method: req.method,
     url: req.url,
     ip: req.ip,
+    timestamp: new Date().getTime(),
   };
 
   res.requestobj = {
