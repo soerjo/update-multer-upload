@@ -11,7 +11,7 @@ const validateSignature = async (req, res) => {
   const objErrorMessage = new ErrorMessageObj();
 
   const { signature, ...allrequestheaders } = { ...req.next };
-  const { tableuserlanguage = "en", ...allrequestbody } = { ...req.body };
+  const { tableuserlanguage, ...allrequestbody } = { ...req.body };
 
   let concatreqbody = "";
   for (let key in allrequestheaders) {

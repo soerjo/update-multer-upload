@@ -16,13 +16,31 @@ const sendOtp = async ({ res, otp, phonenumber }) => {
     params.append("otp_", otp);
     const otpResponse = await axios.post(otpApiUrl, params);
 
+    const logsError = {
+      status: otpResponse?.status,
+      statusText: otpResponse?.statusText,
+      method: otpResponse?.config?.method,
+      url: otpResponse?.config?.url,
+      data: otpResponse?.config?.data,
+      bodyresponse: otpResponse?.data,
+    };
+
     apiObj.apiName = "call OTP api";
     apiObj.timeStamp = new Date().getTime();
-    apiObj.response = otpResponse?.data;
+    apiObj.response = logsError;
   } catch (error) {
+    const logsError = {
+      status: error.response?.status,
+      statusText: error.response?.statusText,
+      method: error.response?.config?.method,
+      url: error.response?.config?.url,
+      data: error.response?.config?.data,
+      bodyresponse: error?.response?.data,
+    };
+
     apiObj.apiName = "call OTP api";
     apiObj.timeStamp = new Date().getTime();
-    apiObj.response = error.response?.data;
+    apiObj.response = logsError;
   }
 
   res.apiresponse = [...res.apiresponse, apiObj];

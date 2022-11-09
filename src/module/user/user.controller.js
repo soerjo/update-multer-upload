@@ -1,5 +1,3 @@
-const { v4: uuidv4 } = require("uuid");
-
 const { sendEmail } = require("../email/email.service");
 const { execQuery } = require("../../configs/mysql.config");
 const responseHandler = require("../../common/handler/response.handler");
@@ -10,7 +8,6 @@ const namespace = "AUTH_CONTROLLER";
 
 const profileController = async (req, res) => {
   res.isnotification = false;
-  res.id = uuidv4();
   res.actions = "/user/show_detail_id";
   const { userindex } = req.next;
 
@@ -24,9 +21,8 @@ const profileController = async (req, res) => {
   }
 };
 
-const updateUsernameController = async (req, res) => {
-  res.isnotification = false;
-  res.id = uuidv4();
+const changeUsernameController = async (req, res) => {
+  res.isnotification = true;
   res.actions = "/user/update_username";
   const { platform, tokenlogin, tableusername } = req.next;
 
@@ -36,6 +32,14 @@ const updateUsernameController = async (req, res) => {
 
     if (!resultspuserprofile.resultstatus) return responseHandler({ res, statusCode: 400, objResponse: resultspuserprofile });
 
+    sendEmail({
+      res: res,
+      useremail: resultspuserprofile.resultuseremail,
+      subject: resultspuserprofile.resultuserfullname + ", your username has been changed",
+      usernamefull: resultspuserprofile.resultuserfullname,
+      message: "your username has been changed",
+    });
+
     return responseHandler({ res, statusCode: 200, objResponse: resultspuserprofile });
   } catch (error) {
     throw new Error(error.message);
@@ -44,7 +48,6 @@ const updateUsernameController = async (req, res) => {
 
 const updatePasswordProfil = async (req, res) => {
   res.isnotification = false;
-  res.id = uuidv4();
   res.actions = "/user/change_password";
   const { platform, userindex, tokenlogin, userpasswordold, userpasswordnew } = req.next;
 
@@ -52,14 +55,12 @@ const updatePasswordProfil = async (req, res) => {
     let resultspchangepassword = await execQuery("CALL spxxxchangepassword(?, ?, ?, ?, ?)", [platform, userindex, tokenlogin, userpasswordold, userpasswordnew]);
     resultspchangepassword = resultspchangepassword[0][0];
 
-    console.log(resultspchangepassword);
-
     if (!resultspchangepassword.resultstatus) return responseHandler({ res, statusCode: 400, objResponse: resultspchangepassword });
 
-    await sendEmail({
+    sendEmail({
       res: res,
       useremail: resultspchangepassword.resultuseremail,
-      usernamefull: resultspchangepassword.resultuserfullname,
+      subject: resultspchangepassword.resultuserfullname + ", your username has been changed",
       message: "your password has been changed",
     });
 
@@ -71,7 +72,6 @@ const updatePasswordProfil = async (req, res) => {
 
 const resetPinProfile = async (req, res) => {
   res.isnotification = false;
-  res.id = uuidv4();
   res.actions = "/user/insert_or_reset_pin";
   const { platform, userindex, tokenlogin, userpinnew, userpassword } = req.next;
 
@@ -81,7 +81,7 @@ const resetPinProfile = async (req, res) => {
 
     if (!resultspresetpin.resultstatus) return responseHandler({ res, statusCode: 400, objResponse: resultspresetpin });
 
-    await sendEmail({
+    sendEmail({
       res: res,
       useremail: resultspresetpin.resultuseremail,
       usernamefull: resultspresetpin.resultuserfullname,
@@ -96,7 +96,6 @@ const resetPinProfile = async (req, res) => {
 
 const requestOtpController = async (req, res) => {
   res.isnotification = false;
-  res.id = uuidv4();
   res.actions = "/user/request_otp";
   const resultObj = new ResObjectResult();
   const { userindex } = req.next;
@@ -147,14 +146,6 @@ const requestOtpController = async (req, res) => {
       phonenumber: resSelectUser.tableuserphonenumber,
     });
 
-    // if (!resSendOtp?.status) {
-    //   resultObj.resultstatus = 0;
-    //   resultObj.resultcode = "xxx999999999";
-    //   resultObj.resulterrormessage = resSendOtp?.message;
-
-    //   return responseHandler({ res, statusCode: 400, objResponse: resultObj });
-    // }
-
     return responseHandler({ res, objResponse: resultObj });
   } catch (error) {
     throw new Error(error.message);
@@ -163,7 +154,6 @@ const requestOtpController = async (req, res) => {
 
 const validateOtpController = async (req, res) => {
   res.isnotification = false;
-  res.id = uuidv4();
   res.actions = "/user/validate_otp";
   const resultObj = new ResObjectResult();
   const { userindex, otp } = req.next;
@@ -219,7 +209,6 @@ const validateOtpController = async (req, res) => {
 
 const changePhoneNumber = async (req, res) => {
   res.isnotification = false;
-  res.id = uuidv4();
   res.actions = "/user/change_phone_number";
   const resultObj = new ResObjectResult();
   const { userindex, userphonecountrycode, userphonenumbershort } = req.next;
@@ -248,7 +237,6 @@ const changePhoneNumber = async (req, res) => {
 
 const insertchangephonenumber = async (req, res) => {
   res.isnotification = false;
-  res.id = uuidv4();
   res.actions = "/user/list_phone_area_code";
   const { userindex } = req.next;
 
@@ -266,7 +254,6 @@ const insertchangephonenumber = async (req, res) => {
 
 const changeColorController = async (req, res) => {
   res.isnotification = false;
-  res.id = uuidv4();
   res.actions = "/user/change_color_theme";
   const { colorback, colorfront, userindex } = req.next;
 
@@ -281,7 +268,7 @@ const changeColorController = async (req, res) => {
 
 module.exports = {
   profileController,
-  updateUsernameController,
+  changeUsernameController,
   updatePasswordProfil,
   resetPinProfile,
   requestOtpController,

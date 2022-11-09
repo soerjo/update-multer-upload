@@ -18,7 +18,7 @@ const validator = (schema) => async (req, res) => {
     const { error, value } = await schema.validate(req.body, { abortEarly: false });
 
     if (error) {
-      objReturnData.resultstatus = error && 0;
+      objReturnData.resultstatus = 0;
       objReturnData.resultmessage =
         error &&
         error.details.map((err) => {

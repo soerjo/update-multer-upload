@@ -1,15 +1,18 @@
+const { v4: uuidv4 } = require("uuid");
+
 const logsrequest = async (req, res) => {
   let reqbody;
+
   if (req.body) {
     const { tableuserpasswordnew, tableuserpassword, userpasswordold, userpasswordnew, userpassword, userpinnew, ...resreqbody } = req.body;
     reqbody = resreqbody;
   }
 
+  res.id = uuidv4();
   res.logs = {
     method: req.method,
     url: req.url,
     ip: req.ip,
-    timestamp: new Date().getTime(),
   };
 
   res.requestobj = {

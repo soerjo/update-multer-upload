@@ -14,8 +14,8 @@ fastify.register(require("@fastify/static"), {
   root: join(__dirname, `/.${process.env.UPLOAD_FILE_DIR}`),
   prefix: process.env.UPLOADED_PREFIX || "/public/",
 });
-fastify.register(contentParser);
 fastify.addHook("preHandler", logsrequest);
+fastify.register(contentParser);
 
 allRoutes(fastify);
 

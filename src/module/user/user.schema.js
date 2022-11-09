@@ -9,7 +9,7 @@ const defaultSchema = Joi.object({
   tokenlogin: Joi.string().required().label("xxx005190005 tokenlogin"),
 })
   .required()
-  .unknown()
+  .unknown();
 
 // INSERT_SCHEMA
 const insertNewSchema = Joi.object({
@@ -89,7 +89,7 @@ const forgotSchema = Joi.object({
 const profileSchema = Joi.object({}).unknown().label("xxx999999990 body");
 
 // UPDATE_PROFILE
-const updateProfileSchema = Joi.object({
+const changeUsernameSchema = Joi.object({
   tableusername: Joi.string().min(5).max(16).required().label("xxx005190005 tableusername"),
 })
   .required()
@@ -155,7 +155,7 @@ module.exports = {
   logoutSchema,
   forgotSchema,
   profileSchema,
-  updateProfileSchema,
+  changeUsernameSchema,
   updatePasswordProfileSchema,
   resetPinProfileSchema,
   trigerOtpSchema,

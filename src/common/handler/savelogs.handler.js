@@ -1,13 +1,11 @@
-const EmailsModel = require("../../model/email.model");
 const LogsModel = require("../../model/logs.model");
-const OtpsModel = require("../../model/otp.model");
 
 const saveLogs = async (res, statusCode, statObjRes, error) => {
   try {
-    const method = res.logs.method;
-    const url = res.logs.url;
+    const method = res.logs?.method;
+    const url = res.logs?.url;
     const datetime = new Date().toISOString();
-    const responsetime = `${new Date().getTime() - res.logs.timestamp}ms`;
+    const responsetime = `${new Date().getTime() - res.logs?.timestamp}ms`;
 
     const payload = {
       logsid: res?.id || "",
@@ -15,13 +13,15 @@ const saveLogs = async (res, statusCode, statObjRes, error) => {
       error: error?.message || "",
       action: res.actions || "",
       actionresult: res.actionresult || "",
-      platform: res.requestobj.body?.platform,
-      logweb: res.requestobj.headers?.platform === "WEBSITE",
-      logapp: res.requestobj.headers?.platform !== "WEBSITE",
+      platform: res.requestobj?.body?.platform,
+      logweb: res.requestobj?.headers?.platform === "WEBSITE",
+      logapp: res.requestobj?.headers?.platform === "ANDROID" || res.requestobj?.headers?.platform === "IPHONE",
       isnotification: res.isnotification,
       datetime: datetime,
       responsetime: responsetime,
+
       ...res.logs,
+      timestamp: new Date().getTime(),
 
       userindex: res.userobject?.userindex || "",
       username: res.userobject?.username || "",
@@ -31,7 +31,7 @@ const saveLogs = async (res, statusCode, statObjRes, error) => {
       userColorfront: res.userobject?.userColorfront || "",
       userphotoprofileurl: res.userobject?.userphotoprofileurl || "",
 
-      ids: [...res.ids],
+      ids: res.ids ? [...res.ids] : [],
       APIresponse: res?.apiresponse || [],
 
       request: res.requestobj,

@@ -1,31 +1,31 @@
-const { checkUserLogin } = require("../../module/user/user.service");
+const { execQuery } = require("../../configs/mysql.config");
 const responseHandler = require("../handler/response.handler");
 const IdsObjClass = require("../objClass/IdsObj.class");
 const UserObjClass = require("../objClass/UserObj.class");
 
 const validateLogin = async (req, res) => {
   const { platform, userindex, tokenlogin } = req.next;
-  // console.log(platform, userindex, tokenlogin);
 
-  const checkuser = await checkUserLogin(platform, userindex, tokenlogin);
+  let checkuser = await execQuery("CALL spxxxauthtokenlast(?,?,?)", [platform, userindex, tokenlogin]);
+  checkuser = checkuser[0][0];
 
   if (!checkuser.resultstatus) return responseHandler({ res: res, statusCode: 401, objResponse: checkuser });
 
   const idsobj = new IdsObjClass();
-  idsobj.id = checkuser.data.tableuserindex;
-  idsobj.description = checkuser.data.tableuserfullname;
-  idsobj.colorback = checkuser.data.tableusercolorback;
-  idsobj.colorfront = checkuser.data.tableusercolorfront;
-  idsobj.imageurl = checkuser.data.tableuserphotourl;
+  idsobj.id = checkuser.tableuserindex;
+  idsobj.description = checkuser.tableuserfullname;
+  idsobj.colorback = checkuser.tableusercolorback;
+  idsobj.colorfront = checkuser.tableusercolorfront;
+  idsobj.imageurl = checkuser.tableuserphotourl;
 
   const userobj = new UserObjClass();
-  userobj.userindex = checkuser.data.tableuserindex;
-  userobj.username = checkuser.data.tableusername;
-  userobj.userfullname = checkuser.data.tableuserfullname;
-  userobj.userinitial = checkuser.data.tableuserinitial;
-  userobj.usercolorback = checkuser.data.tableusercolorback;
-  userobj.userColorfront = checkuser.data.tableusercolorfront;
-  userobj.userphotoprofileurl = checkuser.data.tableuserphotourl;
+  userobj.userindex = checkuser.tableuserindex;
+  userobj.username = checkuser.tableusername;
+  userobj.userfullname = checkuser.tableuserfullname;
+  userobj.userinitial = checkuser.tableuserinitial;
+  userobj.usercolorback = checkuser.tableusercolorback;
+  userobj.userColorfront = checkuser.tableusercolorfront;
+  userobj.userphotoprofileurl = checkuser.tableuserphotourl;
 
   res.userobject = userobj;
   res.ids = [...res.ids, { ...idsobj }];

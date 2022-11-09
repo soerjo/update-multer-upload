@@ -10,13 +10,19 @@ const responseHandler = ({ res, statusCode = 200, objResponse, data, support, er
     statObjRes.status = objResponse?.resultstatus || 0;
     statObjRes.tokentrans = objResponse?.resulttokentrans || "";
     statObjRes.index = objResponse?.resultindex || "";
-    statObjRes.message = objResponse?.resultmessage || [];
 
-    if (objResponse.resulterrormessage) {
-      objErrorMessage.code = objResponse.resultcode;
+    if (objResponse.resultmessage) {
+      statObjRes.message = objResponse?.resultmessage || [];
+    }
+
+    if (objResponse.resulterrormessage || objResponse?.resultcode !== "xxx000000000") {
+      objErrorMessage.code = objResponse?.resultcode;
       objErrorMessage.errormassage = objResponse.resulterrormessage;
       objErrorMessage.codevariable = objResponse?.resultcodevariable || "";
+
       statObjRes.message = [objErrorMessage];
+    } else {
+      objErrorMessage.errormassage = [];
     }
   }
 

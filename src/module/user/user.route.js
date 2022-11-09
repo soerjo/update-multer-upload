@@ -23,7 +23,7 @@ async function userRouter(fastify) {
 
   // PROFILE_ROUTE
   fastify.post("/v01/profile", {}, userController.profileController);
-  fastify.post("/v01/changeusername", { preHandler: validator(userSchema.updateProfileSchema) }, userController.updateUsernameController);
+  fastify.post("/v01/changeusername", { preHandler: validator(userSchema.changeUsernameSchema) }, userController.changeUsernameController);
   fastify.post("/v01/changepassword", { preHandler: validator(userSchema.updatePasswordProfileSchema) }, userController.updatePasswordProfil);
   fastify.post("/v01/changecolor", { preHandler: validator(userSchema.changecolorSchema) }, userController.changeColorController);
   fastify.post("/v01/resetpin", { preHandler: validator(userSchema.resetPinProfileSchema) }, userController.resetPinProfile);
