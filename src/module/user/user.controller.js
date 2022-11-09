@@ -182,11 +182,7 @@ const validateOtpController = async (req, res) => {
       return responseHandler({ res, statusCode: 400, objResponse: resultObj });
     }
 
-    // SUSPEND USER
-    console.log(resSelectUser.tableuserphonenumberfailedattempt);
-
     if (resSelectUser.tableuserphonenumberfailedattempt > 2) {
-      console.log("triger", userindex);
       await execQuery(`CALL spxxxsuspendotp(?)`, [userindex]);
     }
 
@@ -195,12 +191,14 @@ const validateOtpController = async (req, res) => {
       resultObj.resultcode = "xxx005095015";
       resultObj.resulterrormessage = "the otp is not valid";
 
-      const failedatempotpcount = resSelectUser.tableuserphonenumberfailedattempt + 1;
-      await execQuery("UPDATE	xxxtableuser SET tableuserphonenumberfailedattempt = ?, tableuserphonenumberfailedattemptlast = ? WHERE tableuserindex = ?;", [
-        failedatempotpcount,
-        new Date(),
-        userindex,
-      ]);
+      if (resSelectUser.tableuserphonenumberfailedattempt < 3) {
+        const failedatempotpcount = resSelectUser.tableuserphonenumberfailedattempt + 1;
+        await execQuery("UPDATE	xxxtableuser SET tableuserphonenumberfailedattempt = ?, tableuserphonenumberfailedattemptlast = ? WHERE tableuserindex = ?;", [
+          failedatempotpcount,
+          new Date(),
+          userindex,
+        ]);
+      }
 
       return responseHandler({ res, statusCode: 400, objResponse: resultObj });
     }
