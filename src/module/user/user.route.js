@@ -12,6 +12,11 @@ const validatorHeaders = require("../../common/validator/headers.validator");
 // const validateHeaders = require("../../common/validator/validateHeader.validator");
 const namespace = "USER ROUTES";
 
+const customValidateStore = async (req) => {
+  console.log(req.body);
+  req.body.usernameinemail = req.body.tableusername + "@gmail.com";
+};
+
 async function userRouter(fastify) {
   // PRE-HANDLER AUTH ROUTES
 
@@ -23,7 +28,7 @@ async function userRouter(fastify) {
 
   // PROFILE_ROUTE
   fastify.post("/v01/profile", {}, userController.profileController);
-  fastify.post("/v01/changeusername", { preHandler: validator(userSchema.changeUsernameSchema) }, userController.changeUsernameController);
+  fastify.post("/v01/changeusername", { preHandler: [customValidateStore, validator(userSchema.changeUsernameSchema)] }, userController.changeUsernameController);
   fastify.post("/v01/changepassword", { preHandler: validator(userSchema.updatePasswordProfileSchema) }, userController.updatePasswordProfil);
   fastify.post("/v01/changecolor", { preHandler: validator(userSchema.changecolorSchema) }, userController.changeColorController);
   fastify.post("/v01/resetpin", { preHandler: validator(userSchema.resetPinProfileSchema) }, userController.resetPinProfile);

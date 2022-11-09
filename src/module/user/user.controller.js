@@ -77,6 +77,7 @@ const resetPinProfile = async (req, res) => {
 
   try {
     let resultspresetpin = await execQuery("CALL `spxxxresetpin`(?, ?, ?, ?, ?)", [platform, userindex, tokenlogin, userpinnew, userpassword]);
+    console.log(resultspresetpin);
     resultspresetpin = resultspresetpin[0][0];
 
     if (!resultspresetpin.resultstatus) return responseHandler({ res, statusCode: 400, objResponse: resultspresetpin });
@@ -109,7 +110,7 @@ const requestOtpController = async (req, res) => {
 
     if (resSelectUser.tableuserphonenumberisverified) {
       resultObj.resultstatus = 0;
-      resultObj.resultcode = "xxx999999999";
+      resultObj.resultcode = "xxx005075010";
       resultObj.resulterrormessage = "phone number has been verified";
 
       return responseHandler({ res, statusCode: 400, objResponse: resultObj });
@@ -119,7 +120,7 @@ const requestOtpController = async (req, res) => {
       const abs = Math.floor(Math.abs(new Date(resSelectUser.tableuserphoneverificationcodenext).getTime() - new Date().getTime()) / 1000);
 
       resultObj.resultstatus = 0;
-      resultObj.resultcode = "xxx999999999";
+      resultObj.resultcode = "xxx999999945";
       resultObj.resulterrormessage = "you can not request otp for ### second";
       resultObj.resultcodevariable = abs;
 
@@ -132,7 +133,7 @@ const requestOtpController = async (req, res) => {
     }
     let date = new Date();
     let codeOtpExpire = new Date(date.getTime() + 60000);
-    let codeOtpNextRequest = new Date(date.getTime() + Math.pow(2, resSelectUser.tableuserphonenumberfailedattempt) * 30000);
+    let codeOtpNextRequest = new Date(date.getTime() + Math.pow(2, resSelectUser.tableuserphonenumberfailedattempt) * 3000);
 
     await execQuery(
       "UPDATE	xxxtableuser SET tableuserphoneverificationcode = ?, tableuserphoneverificationcodetimestamp = ?, tableuserphoneverificationcodeexpiry = ?, tableuserphoneverificationcodenext= ?  WHERE tableuserindex = ?;",
@@ -165,25 +166,33 @@ const validateOtpController = async (req, res) => {
     );
     resSelectUser = resSelectUser[0];
 
+    if (!resSelectUser.tableuserphoneverificationcode) {
+      resultObj.resultstatus = 0;
+      resultObj.resultcode = "xxx999999920";
+      resultObj.resulterrormessage = "please request otp first";
+
+      return responseHandler({ res, statusCode: 400, objResponse: resultObj });
+    }
+
     if (resSelectUser.tableuserphonenumberisverified) {
       resultObj.resultstatus = 0;
-      resultObj.resultcode = "xxx999999999";
+      resultObj.resultcode = "xxx005075010";
       resultObj.resulterrormessage = "phone number has been verified";
 
       return responseHandler({ res, statusCode: 400, objResponse: resultObj });
     }
 
-    if (new Date() > resSelectUser.tableuserphoneverificationcodeexpiry) {
-      resultObj.resultstatus = 0;
-      resultObj.resultcode = "xxx999999000";
-      resultObj.resulterrormessage = "the otp is expired";
+    // SUSPEND USER
+    console.log(resSelectUser.tableuserphonenumberfailedattempt);
 
-      return responseHandler({ res, statusCode: 400, objResponse: resultObj });
+    if (resSelectUser.tableuserphonenumberfailedattempt > 2) {
+      console.log("triger", userindex);
+      await execQuery(`CALL spxxxsuspendotp(?)`, [userindex]);
     }
 
     if (resSelectUser.tableuserphoneverificationcode !== otp) {
       resultObj.resultstatus = 0;
-      resultObj.resultcode = "xxx999999000";
+      resultObj.resultcode = "xxx005095015";
       resultObj.resulterrormessage = "the otp is not valid";
 
       const failedatempotpcount = resSelectUser.tableuserphonenumberfailedattempt + 1;
@@ -192,6 +201,14 @@ const validateOtpController = async (req, res) => {
         new Date(),
         userindex,
       ]);
+
+      return responseHandler({ res, statusCode: 400, objResponse: resultObj });
+    }
+
+    if (new Date() > resSelectUser.tableuserphoneverificationcodeexpiry) {
+      resultObj.resultstatus = 0;
+      resultObj.resultcode = "xxx005095005";
+      resultObj.resulterrormessage = "the otp is expired";
 
       return responseHandler({ res, statusCode: 400, objResponse: resultObj });
     }
@@ -208,7 +225,7 @@ const validateOtpController = async (req, res) => {
 };
 
 const changePhoneNumber = async (req, res) => {
-  res.isnotification = false;
+  res.isnotification = true;
   res.actions = "/user/change_phone_number";
   const resultObj = new ResObjectResult();
   const { userindex, userphonecountrycode, userphonenumbershort } = req.next;
@@ -219,8 +236,8 @@ const changePhoneNumber = async (req, res) => {
 
     if (!isCountryCodeValid.count) {
       resultObj.resultstatus = 0;
-      resultObj.resultcode = "xxx999999000";
-      resultObj.resulterrormessage = "country code is not valid";
+      resultObj.resultcode = "xxx0250150010";
+      resultObj.resulterrormessage = "phone country code is not valid";
 
       return responseHandler({ res, statusCode: 400, objResponse: resultObj });
     }

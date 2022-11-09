@@ -2,103 +2,89 @@ require("dotenv").config();
 const Joi = require("joi");
 
 const defaultSchema = Joi.object({
-  gtoken: Joi.string().required().label("xxx999999985 gtoken"),
+  gtoken: Joi.string().required().label("xxx999999985 gtoken").messages({
+    "string.base": `"xxx999999985" gtoken should be a type of 'text'`,
+    "string.empty": `"xxx999999985" please provide gtoken`,
+    "any.required": `"xxx999999985" please provide gtoken`,
+  }),
   platform: Joi.string().default("WEBSITE"),
-  signature: Joi.string().required().label("xxx999999980 signature"),
-  userindex: Joi.string().min(5).max(16).required().label("xxx005190005 userindex"),
-  tokenlogin: Joi.string().required().label("xxx005190005 tokenlogin"),
+  signature: Joi.string().required().label("xxx999999980 signature").messages({
+    "string.base": `"xxx999999980" signature should be a type of 'text'`,
+    "string.empty": `"xxx999999980" please provide signature`,
+    "any.required": `"xxx999999980" please provide signature`,
+  }),
+  userindex: Joi.string().min(5).max(16).required().label("xxx005010005 user index").messages({
+    "string.base": `"xxx005010005" user index should be a type of 'text'`,
+    "string.empty": `"xxx005010005" please provide user index`,
+    "any.required": `"xxx005010005" please provide user index`,
+  }),
+  tokenlogin: Joi.string().required().label("xxx999999971 tokenlogin").messages({
+    "string.base": `"xxx999999971" tokenlogin should be a type of 'text'`,
+    "string.empty": `"xxx999999971" please provide tokenlogin`,
+    "any.required": `"xxx999999971" please provide tokenlogin`,
+  }),
 })
   .required()
   .unknown();
-
-// INSERT_SCHEMA
-const insertNewSchema = Joi.object({
-  tableuserreferredby: Joi.string().required().label("xxx005190005 referredby"),
-})
-  .required()
-  .label("xxx999999990 body");
-
-// DETAIL_SCHEMA
-const authDetailSchema = Joi.object({
-  tokentrans: Joi.string().required().label("xxx999999965 tokentrans"),
-})
-  .required()
-  .label("xxx999999990 body");
-
-// STORE_SCHEMA
-const authStoreSchema = Joi.object({
-  tokentrans: Joi.string().required().label("xxx999999965 tokentrans"),
-  tableusername: Joi.string()
-    .min(5)
-    .max(20)
-    .custom((val, helper) => {
-      if (!val.match(/^[0-9a-zA-Z\.\-\_]+$/)) return helper.message("xxx005190005 not alphanumeric");
-      if (!val.substring(0, 1).match(/^[a-zA-Z]+$/)) return helper.message("xxx005190005 start with non alphabet");
-      return val;
-    })
-    .required()
-    .label("xxx005190005 tableusername"),
-  tableuserfullname: Joi.string().min(5).max(100).alphanum().label("xxx005190005 fullname").required(),
-  tableuseremail: Joi.string().email().required().label("xxx005190005 email"),
-})
-  .required()
-  .label("xxx999999990 body");
-
-// NEWPASSWORD_SCHEMA
-const authNewPasswordSchema = Joi.object({
-  tableuseremailverificationcode: Joi.string().required().label("xxx065035010 emailverificationcode"),
-  tableuserpasswordnew: Joi.string()
-    .min(8)
-    .max(16)
-    .regex(/^[a-zA-Z0-9]/)
-    .required()
-    .label("xxx065035010 tableuserpasswordnew"),
-})
-  .required()
-  .unknown()
-  .label("xxx999999990 body");
-
-// SIGNIN_SCHEMA
-const signinSchema = Joi.object({
-  tableusername: Joi.string().min(5).max(20).required().label("xxx005190005 tableusername"),
-  tableuserpassword: Joi.string().min(5).max(100).required().label("xxx005190005 fullname"),
-  latitude: Joi.number().required().label("xxx005200005 latitude"),
-  longitude: Joi.number().required().label("xxx005250005 longitude"),
-})
-  .required()
-  .unknown()
-  .label("xxx999999990 body");
-
-// LOGOUT_SCHEMA
-const logoutSchema = Joi.object({
-  userindex: Joi.string().min(5).max(16).required().label("xxx005190005 userindex"),
-})
-  .required()
-  .unknown()
-  .label("xxx999999990 body");
-
-// FORGOT_SCHEMA
-const forgotSchema = Joi.object({
-  tableusername: Joi.string().min(5).max(20).required().label("xxx005190005 tableusername"),
-})
-  .required()
-  .unknown()
-  .label("xxx999999990 body");
 
 // FORGOT_SCHEMA
 const profileSchema = Joi.object({}).unknown().label("xxx999999990 body");
 
 // UPDATE_PROFILE
 const changeUsernameSchema = Joi.object({
-  tableusername: Joi.string().min(5).max(16).required().label("xxx005190005 tableusername"),
+  usernameinemail: Joi.string().email().required().label("xxx005015015 usernameinemail").messages({
+    "string.base": `"xxx005015005" e user name should be a type of 'text'`,
+    "string.email": `"xxx005015005" e user name is not valid'`,
+    "string.min": `"xxx005015005" e user name  length should more than 5 character`,
+    "string.max": `"xxx005015005" e user name  length should less than 20 character`,
+    "string.empty": `"xxx005015005" e please provide user name`,
+    "any.required": `"xxx005015005" e please provide user name`,
+  }),
+  tableusername: Joi.string().min(5).max(20).required().label("xxx005015005 tableusername").messages({
+    "string.base": `"xxx005015005" user name should be a type of 'text'`,
+    "string.min": `"xxx005015005" user name  length should more than 5 character`,
+    "string.max": `"xxx005015005" user name  length should less than 20 character`,
+    "string.empty": `"xxx005015005" please provide user name`,
+    "any.required": `"xxx005015005" please provide user name`,
+  }),
 })
   .required()
   .unknown()
   .label("xxx999999990 body");
 
 const updatePasswordProfileSchema = Joi.object({
-  userpasswordold: Joi.string().min(5).max(16).required().label("xxx005190005 userpasswordold"),
-  userpasswordnew: Joi.string().min(5).max(16).required().label("xxx005190005 userpasswordnew"),
+  userpasswordold: Joi.string()
+    .min(8)
+    .max(16)
+    .custom((val, helper) => {
+      if (!val.match(/^[0-9a-zA-Z\.\-\_\$\&\#\@\!\*\(\)]+$/)) return helper.message("xxx005116005 only allowed alphanumeric and . - _");
+      return val;
+    })
+    .required()
+    .label("xxx005116005 tableuserpasswordnew")
+    .messages({
+      "string.min": `"xxx005116005" old password length should more than 5 character`,
+      "string.max": `"xxx005116005" old password length should less than 20 character`,
+      "string.base": `"xxx005116005" old password should be a type of 'text'`,
+      "string.empty": `"xxx005116005" please provide old password`,
+      "any.required": `"xxx005116005" please provide old password`,
+    }),
+  userpasswordnew: Joi.string()
+    .min(8)
+    .max(16)
+    .custom((val, helper) => {
+      if (!val.match(/^[0-9a-zA-Z\.\-\_\$\&\#\@\!\*\(\)]+$/)) return helper.message("xxx005190005 only allowed alphanumeric and . - _");
+      return val;
+    })
+    .required()
+    .label("xxx005117005 tableuserpasswordnew")
+    .messages({
+      "string.min": `"xxx005117005" new password length should more than 5 character`,
+      "string.max": `"xxx005117005" new password length should less than 20 character`,
+      "string.base": `"xxx005117005" new password should be a type of 'text'`,
+      "string.empty": `"xxx005117005" please provide new password`,
+      "any.required": `"xxx005117005" please provide new password`,
+    }),
 })
   .required()
   .unknown()
@@ -112,8 +98,20 @@ const changecolorSchema = Joi.object({
   .label("xxx999999990 body");
 
 const resetPinProfileSchema = Joi.object({
-  userpinnew: Joi.string().min(5).max(16).required().label("xxx005190005 userpasswordold"),
-  userpassword: Joi.string().min(5).max(16).required().label("xxx005190005 userpasswordnew"),
+  userpinnew: Joi.string().min(6).max(6).required().label("xxx005200005 pin").messages({
+    "string.base": `"xxx005200005" pin should be a type of 'text'`,
+    "string.min": `"xxx005200005" pin length should more than 5 character`,
+    "string.max": `"xxx005200005" pin length should less than 20 character`,
+    "string.empty": `"xxx005200005" please provide pin`,
+    "any.required": `"xxx005200005" please provide pin`,
+  }),
+  userpassword: Joi.string().min(5).max(100).required().label("xxx005115005 password").messages({
+    "string.base": `"xxx005115005" password should be a type of 'text'`,
+    "string.min": `"xxx005115005" password length should more than 5 character`,
+    "string.max": `"xxx005115005" password length should less than 20 character`,
+    "string.empty": `"xxx005115005" please provide new password`,
+    "any.required": `"xxx005115005" please provide new password`,
+  }),
 })
   .required()
   .unknown()
@@ -129,7 +127,11 @@ const validateOtpSchema = Joi.object({
   .label("xxx999999990 body");
 
 const changePhoneNumberSchema = Joi.object({
-  userphonecountrycode: Joi.number().required().label("xxx005190005 phonecountrycode"),
+  userphonecountrycode: Joi.number().required().label("xxx025015005 phonecountrycode").messages({
+    "number.base": `"xxx025015005" phone country code should be a type of 'number'`,
+    "number.empty": `"xxx025015005" please provide phone country code`,
+    "any.required": `"xxx025015005" please provide phone country code`,
+  }),
   userphonenumbershort: Joi.number()
     .custom((val, helper) => {
       console.log(val.toString());
@@ -137,7 +139,12 @@ const changePhoneNumberSchema = Joi.object({
       return val;
     })
     .required()
-    .label("xxx005190005 phonenumbershort"),
+    .label("xxx005190005 phonenumbershort")
+    .messages({
+      "number.base": `"xxx005060005" phone number short should be a type of 'number'`,
+      "number.empty": `"xxx005060005" please provide phone number short`,
+      "any.required": `"xxx005060005" please provide phone number short`,
+    }),
 })
   .required()
   .unknown()
@@ -147,13 +154,13 @@ const insertPhoneNumberSchema = Joi.object({}).required().unknown().label("xxx99
 
 module.exports = {
   defaultSchema,
-  insertNewSchema,
-  authDetailSchema,
-  authStoreSchema,
-  authNewPasswordSchema,
-  signinSchema,
-  logoutSchema,
-  forgotSchema,
+  // insertNewSchema,
+  // authDetailSchema,
+  // authStoreSchema,
+  // authNewPasswordSchema,
+  // signinSchema,
+  // logoutSchema,
+  // forgotSchema,
   profileSchema,
   changeUsernameSchema,
   updatePasswordProfileSchema,

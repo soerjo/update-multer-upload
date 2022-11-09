@@ -112,7 +112,7 @@ const authNewPassword = async (req, res) => {
     sendEmail({
       res: res,
       useremail: resultspusernewpassword?.resultemail,
-      subject: `Hi ${tableuserfullname}, your password has been changed`,
+      subject: `Hi ${resultspusernewpassword.tableuserfullname}, your password has been changed`,
       message: "your password has been changed " + new Date().toISOString(),
     });
 
@@ -130,6 +130,8 @@ const authSigninController = async (req, res) => {
   try {
     let resultspxxxauthsignin = await execQuery("CALL spxxxauthsignin(?,?,?,?,?,?)", [platform, tableusername, tableuserpassword, latitude, longitude, tableuserlanguage]);
     resultspxxxauthsignin = resultspxxxauthsignin[0][0];
+
+    console.log(resultspxxxauthsignin);
 
     if (!resultspxxxauthsignin.resultstatus) return responseHandler({ res, statusCode: 401, objResponse: resultspxxxauthsignin });
 
@@ -154,7 +156,7 @@ const authLogoutController = async (req, res) => {
   try {
     let resultsplogout = await execQuery("CALL spxxxlogout(?, ?)", [platform, userindex]);
     resultsplogout = resultsplogout[0][0];
-    console.log('OK', resultsplogout);
+    console.log("OK", resultsplogout);
     if (!resultsplogout?.resultindex) return responseHandler({ res, statusCode: 401, objResponse: resultsplogout });
 
     createIdsLogsUser(res, resultsplogout);
@@ -175,7 +177,7 @@ const forgotController = async (req, res) => {
   try {
     let resultspforgotpassword = await execQuery("CALL spxxxforgotnamepassword(?)", [tableusername]);
     resultspforgotpassword = resultspforgotpassword[0][0];
-    
+
     if (!resultspforgotpassword.resultstatus) return responseHandler({ res, statusCode: 401, objResponse: resultspforgotpassword });
 
     createIdsLogsUser(res, resultspforgotpassword);
@@ -185,7 +187,7 @@ const forgotController = async (req, res) => {
     sendEmail({
       res: res,
       useremail: resultspforgotpassword.resultemail,
-      subject: `Hi ${resultspforgotpassword.tableuserfullname}, this is your email verivication code`,
+      subject: `Hi ${resultspforgotpassword?.tableuserfullname}, this is your email verivication code`,
       message: `This is your email verivication code: ` + resultspforgotpassword.resultemailverificationcode,
     });
 

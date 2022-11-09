@@ -61,30 +61,21 @@ const authStoreSchema = Joi.object({
       "any.required": `"xxx035020005" please provide tokentrans`,
     })
     .label("xxx035020005 tokentrans"),
-  usernameinemail: Joi.string()
-    .email()
-    .required()
-    .messages({
-      "string.base": `"xxx005015005" user name should be a type of 'text'`,
-      "string.email": `"xxx005015005" user name is not valid'`,
-      "string.min": `"xxx005015005" user name  length should more than 5 character`,
-      "string.max": `"xxx005015005" user name  length should less than 20 character`,
-      "string.empty": `"xxx005015005" please provide user name`,
-      "any.required": `"xxx005015005" please provide user name`,
-    })
-    .label("xxx005015015 usernameinemail"),
-  tableusername: Joi.string()
-    .min(5)
-    .max(20)
-    .required()
-    .messages({
-      "string.base": `"xxx005015005" user name should be a type of 'text'`,
-      "string.min": `"xxx005015005" user name  length should more than 5 character`,
-      "string.max": `"xxx005015005" user name  length should less than 20 character`,
-      "string.empty": `"xxx005015005" please provide user name`,
-      "any.required": `"xxx005015005" please provide user name`,
-    })
-    .label("xxx005015005 tableusername"),
+  usernameinemail: Joi.string().email().required().label("xxx005015015 usernameinemail").messages({
+    "string.base": `"xxx005015005" e user name should be a type of 'text'`,
+    "string.email": `"xxx005015005" e user name is not valid'`,
+    "string.min": `"xxx005015005" e user name  length should more than 5 character`,
+    "string.max": `"xxx005015005" e user name  length should less than 20 character`,
+    "string.empty": `"xxx005015005" e please provide user name`,
+    "any.required": `"xxx005015005" e please provide user name`,
+  }),
+  tableusername: Joi.string().min(5).max(20).required().label("xxx005015005 tableusername").messages({
+    "string.base": `"xxx005015005" user name should be a type of 'text'`,
+    "string.min": `"xxx005015005" user name  length should more than 5 character`,
+    "string.max": `"xxx005015005" user name  length should less than 20 character`,
+    "string.empty": `"xxx005015005" please provide user name`,
+    "any.required": `"xxx005015005" please provide user name`,
+  }),
   tableuserfullname: Joi.string()
     .min(5)
     .max(100)
@@ -95,63 +86,61 @@ const authStoreSchema = Joi.object({
       return val;
     })
     .required()
+    .label("xxx005020005 fullname")
     .messages({
       "string.base": `"xxx005020005" user name should be a type of 'text'`,
       "string.empty": `"xxx005020005" please provide user name`,
       "any.required": `"xxx005020005" please provide user name`,
-    })
-    .label("xxx005020005 fullname"),
-  userphonecountrycode: Joi.number()
-    .required()
-    .messages({
-      "number.base": `"xxx025015005" phone country code should be a type of 'number'`,
-      "number.empty": `"xxx025015005" please provide phone country code`,
-      "any.required": `"xxx025015005" please provide phone country code`,
-    })
-    .label("xxx005020005 phonecountrycode"),
+    }),
+  userphonecountrycode: Joi.number().required().label("xxx005020005 phonecountrycode").messages({
+    "number.base": `"xxx025015005" phone country code should be a type of 'number'`,
+    "number.empty": `"xxx025015005" please provide phone country code`,
+    "any.required": `"xxx025015005" please provide phone country code`,
+  }),
   userphonenumbershort: Joi.number()
     .custom((val, helper) => {
-      if (val.toString().length < 6 || val.toString().length > 15) return helper.message("xxx005060005 must beetwen 6 and 15 digits");
+      if (val.toString().length < 6 || val.toString().length > 15) return helper.message("xxx005060010 must beetwen 6 and 15 digits");
       return val;
     })
     .required()
+    .label("xxx005190005 phonenumbershort")
     .messages({
       "number.base": `"xxx005060005" phone number short should be a type of 'number'`,
       "number.empty": `"xxx005060005" please provide phone number short`,
       "any.required": `"xxx005060005" please provide phone number short`,
-    })
-    .label("xxx005190005 phonenumbershort"),
-  tableuseremail: Joi.string().email().required().label("xxx005190005 email"),
+    }),
+  tableuseremail: Joi.string().email().required().label("xxx005035005 email").messages({
+    "number.base": `"xxx005035005" email should be a type of 'number'`,
+    "number.empty": `"xxx005035005" please provide email`,
+    "any.required": `"xxx005035005" please provide email`,
+  }),
 })
   .required()
   .label("xxx999999990 body!");
 
 // NEWPASSWORD_SCHEMA
 const authNewPasswordSchema = Joi.object({
-  tableuseremailverificationcode: Joi.string()
-    .required()
-    .messages({
-      "number.base": `"xxx005040005" email verification code should be a type of 'text'`,
-      "number.empty": `"xxx005040005" please provide email verification code`,
-      "any.required": `"xxx005040005" please provide email verification code`,
-    })
-    .label("xxx005040005 emailverificationcode"),
+  tableuseremailverificationcode: Joi.string().required().label("xxx005040005 emailverificationcode").messages({
+    "number.base": `"xxx005040005" email verification code should be a type of 'text'`,
+    "number.empty": `"xxx005040005" please provide email verification code`,
+    "any.required": `"xxx005040005" please provide email verification code`,
+  }),
   tableuserpasswordnew: Joi.string()
     .min(8)
     .max(16)
     .custom((val, helper) => {
-      if (!val.match(/^[0-9a-zA-Z\.\-\_\$\&\#\@\!\*\(\)]+$/)) return helper.message("xxx005190005 only allowed alphanumeric and . - _");
+      if (!val.match(/^[0-9a-zA-Z\.\-\_\$\&\#\@\!\*\(\)]+$/)) return helper.message("xxx005115005 only allowed alphanumeric and . - _");
       return val;
     })
+    .required()
+    .label("xxx005115005 tableuserpasswordnew")
     .messages({
       "string.min": `"xxx005115005" password length should more than 5 character`,
       "string.max": `"xxx005115005" password length should less than 20 character`,
       "number.base": `"xxx005115005" password should be a type of 'text'`,
       "number.empty": `"xxx005115005" please provide new password`,
       "any.required": `"xxx005115005" please provide new password`,
-    })
-    .required()
-    .label("xxx005115005 tableuserpasswordnew"),
+    }),
 })
   .required()
   .unknown()
@@ -159,30 +148,20 @@ const authNewPasswordSchema = Joi.object({
 
 // SIGNIN_SCHEMA
 const signinSchema = Joi.object({
-  tableusername: Joi.string()
-    .min(5)
-    .max(20)
-    .required()
-    .messages({
-      "string.base": `"xxx005015005" user name should be a type of 'text'`,
-      "string.min": `"xxx005015005" user name  length should more than 5 character`,
-      "string.max": `"xxx005015005" user name  length should less than 20 character`,
-      "string.empty": `"xxx005015005" please provide user name`,
-      "any.required": `"xxx005015005" please provide user name`,
-    })
-    .label("xxx005190005 username"),
-  tableuserpassword: Joi.string()
-    .min(5)
-    .max(100)
-    .required()
-    .messages({
-      "number.base": `"xxx005115005" password should be a type of 'text'`,
-      "string.min": `"xxx005115005" password length should more than 5 character`,
-      "string.max": `"xxx005115005" password length should less than 20 character`,
-      "number.empty": `"xxx005115005" please provide new password`,
-      "any.required": `"xxx005115005" please provide new password`,
-    })
-    .label("xxx005115005 password"),
+  tableusername: Joi.string().min(5).max(20).required().label("xxx005015005 username").messages({
+    "string.base": `"xxx005015005" user name should be a type of 'text'`,
+    "string.min": `"xxx005015005" user name  length should more than 5 character`,
+    "string.max": `"xxx005015005" user name  length should less than 20 character`,
+    "string.empty": `"xxx005015005" please provide user name`,
+    "any.required": `"xxx005015005" please provide user name`,
+  }),
+  tableuserpassword: Joi.string().min(5).max(100).required().label("xxx005115005 password").messages({
+    "number.base": `"xxx005115005" password should be a type of 'text'`,
+    "string.min": `"xxx005115005" password length should more than 5 character`,
+    "string.max": `"xxx005115005" password length should less than 20 character`,
+    "number.empty": `"xxx005115005" please provide new password`,
+    "any.required": `"xxx005115005" please provide new password`,
+  }),
   latitude: Joi.number().required().label("xxx010015005 latitude"),
   longitude: Joi.number().required().label("xxx010020005 longitude"),
 })
@@ -192,18 +171,13 @@ const signinSchema = Joi.object({
 
 // LOGOUT_SCHEMA
 const logoutSchema = Joi.object({
-  userindex: Joi.string()
-    .min(5)
-    .max(16)
-    .required()
-    .messages({
-      "string.base": `"xxx005010005" user index should be a type of 'text'`,
-      "string.min": `"xxx005010005" user index  length should more than 5 character`,
-      "string.max": `"xxx005010005" user index  length should less than 16 character`,
-      "string.empty": `"xxx005010005" please provide user index`,
-      "any.required": `"xxx005010005" please provide user index`,
-    })
-    .label("xxx005010005 userindex"),
+  userindex: Joi.string().min(5).max(16).required().label("xxx005010005 userindex").messages({
+    "string.base": `"xxx005010005" user index should be a type of 'text'`,
+    "string.min": `"xxx005010005" user index  length should more than 5 character`,
+    "string.max": `"xxx005010005" user index  length should less than 16 character`,
+    "string.empty": `"xxx005010005" please provide user index`,
+    "any.required": `"xxx005010005" please provide user index`,
+  }),
 })
   .required()
   .unknown()
@@ -211,18 +185,13 @@ const logoutSchema = Joi.object({
 
 // FORGOT_SCHEMA
 const forgotSchema = Joi.object({
-  tableusername: Joi.string()
-    .min(5)
-    .max(20)
-    .required()
-    .messages({
-      "string.base": `"xxx005015005" user name should be a type of 'text'`,
-      "string.min": `"xxx005015005" user name  length should more than 5 character`,
-      "string.max": `"xxx005015005" user name  length should less than 20 character`,
-      "string.empty": `"xxx005015005" please provide user name`,
-      "any.required": `"xxx005015005" please provide user name`,
-    })
-    .label("xxx005190005 username"),
+  tableusername: Joi.string().min(5).max(20).required().label("xxx005015005 username").messages({
+    "string.base": `"xxx005015005" user name should be a type of 'text'`,
+    "string.min": `"xxx005015005" user name  length should more than 5 character`,
+    "string.max": `"xxx005015005" user name  length should less than 20 character`,
+    "string.empty": `"xxx005015005" please provide user name`,
+    "any.required": `"xxx005015005" please provide user name`,
+  }),
 })
   .required()
   .unknown()
