@@ -131,7 +131,7 @@ const authSigninController = async (req, res) => {
     let resultspxxxauthsignin = await execQuery("CALL spxxxauthsignin(?,?,?,?,?,?)", [platform, tableusername, tableuserpassword, latitude, longitude, tableuserlanguage]);
     resultspxxxauthsignin = resultspxxxauthsignin[0][0];
 
-    if (!resultspxxxauthsignin.resultindex) return responseHandler({ res, statusCode: 401, objResponse: resultspxxxauthsignin });
+    if (!resultspxxxauthsignin.resultstatus) return responseHandler({ res, statusCode: 401, objResponse: resultspxxxauthsignin });
 
     createIdsLogsUser(res, resultspxxxauthsignin);
 
@@ -154,7 +154,7 @@ const authLogoutController = async (req, res) => {
   try {
     let resultsplogout = await execQuery("CALL spxxxlogout(?, ?)", [platform, userindex]);
     resultsplogout = resultsplogout[0][0];
-
+    console.log('OK', resultsplogout);
     if (!resultsplogout?.resultindex) return responseHandler({ res, statusCode: 401, objResponse: resultsplogout });
 
     createIdsLogsUser(res, resultsplogout);
@@ -175,8 +175,8 @@ const forgotController = async (req, res) => {
   try {
     let resultspforgotpassword = await execQuery("CALL spxxxforgotnamepassword(?)", [tableusername]);
     resultspforgotpassword = resultspforgotpassword[0][0];
-
-    if (!resultspforgotpassword.resultindex) return responseHandler({ res, statusCode: 401, objResponse: resultspforgotpassword });
+    
+    if (!resultspforgotpassword.resultstatus) return responseHandler({ res, statusCode: 401, objResponse: resultspforgotpassword });
 
     createIdsLogsUser(res, resultspforgotpassword);
 
