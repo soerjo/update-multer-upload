@@ -29,7 +29,6 @@ const EncryptRJ256 = (plaintext) => {
   };
 
   var generateIv = GeneralFunction.ivBlockRowSize(16);
-  // console.log(generateIv);
 
   var key = inverseSubtitutiveBytes(process.env.ENC_KEY, "", 100, 32);
   var cipher = crypto.createCipheriv("aes-256-cbc", key, Buffer.from(generateIv));
@@ -47,7 +46,6 @@ const EncryptRJ1024 = (plaintext, ivBlock, ivRow) => {
   let returnencrypted = "";
 
   var IvSize = GeneralFunction.calculateivBlockSize(ivBlock, ivRow);
-  // console.log(IvSize);
   var key = inverseSubtitutiveBytes(process.env.ENC_KEY, "", 100, 32);
   var cipher = crypto.createCipheriv("aes-256-cbc", key, Buffer.from(IvSize.substring(0, 16)));
   var subBytes = cipher.update(plaintext, "utf8");
@@ -78,7 +76,6 @@ const DecryptRJ1024 = (encrypted, ivBlock, ivRow) => {
   let returndecrypted = "";
 
   var IvSize = GeneralFunction.calculateivBlockSize(ivBlock, ivRow);
-  // console.log(IvSize);
   var key = inverseSubtitutiveBytes(process.env.ENC_KEY, "", 100, 32);
   var decipher = crypto.createDecipheriv("aes-256-cbc", key, Buffer.from(IvSize.substring(0, 16)));
   var decrypted = decipher.update(encrypted, "base64", "utf8");

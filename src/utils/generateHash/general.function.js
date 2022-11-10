@@ -29,14 +29,12 @@ const ivBlockRowSize = (length) => {
   };
 
   seed = seeding[seed];
-  // console.log(seed);
 
   const charactersLength = seed.length;
   for (let i = 0; i < length; i++) {
     result += seed.charAt(Math.floor(Math.random() * charactersLength));
   }
-  // console.log(result);
-  // result = '012345678901234567890123456789'
+
   return result;
 };
 

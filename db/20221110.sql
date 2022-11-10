@@ -343,7 +343,7 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`soerjo`@`%` FUNCTION `fcxxxindextablegenerate`(`parametertableindexindex` CHAR(4)) RETURNS varchar(15) CHARSET utf8mb4
+CREATE FUNCTION `fcxxxindextablegenerate`(`parametertableindexindex` CHAR(4)) RETURNS varchar(15) CHARSET utf8mb4
 BEGIN
 	SET @returnTemp = '080000000000';
 
@@ -410,7 +410,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`soerjo`@`%` PROCEDURE `spxxxauthlogininfo`(
+CREATE PROCEDURE `spxxxauthlogininfo`(
 IN `platform` VARCHAR(20), 
 IN `userindex` VARCHAR(15)
 )
@@ -476,7 +476,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`soerjo`@`%` PROCEDURE `spxxxauthsignin`(
+CREATE PROCEDURE `spxxxauthsignin`(
 	IN `platform` VARCHAR(20),
 	IN `username` VARCHAR(320),
 	IN `userpassword` VARCHAR(60),
@@ -746,7 +746,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`soerjo`@`%` PROCEDURE `spxxxauthtokenlast`(
+CREATE PROCEDURE `spxxxauthtokenlast`(
 	IN `platform` VARCHAR(20),
 	IN `userindex` VARCHAR(15),
 	IN `usertoken` VARCHAR(254)
@@ -926,7 +926,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`soerjo`@`%` PROCEDURE `spxxxchangenumberphone`(
+CREATE PROCEDURE `spxxxchangenumberphone`(
 	IN phonecountrycode bigint(20),
 	IN phonenumbershort bigint(20),
 	IN userindex varchar(15)
@@ -1017,7 +1017,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`soerjo`@`%` PROCEDURE `spxxxchangepassword`(
+CREATE PROCEDURE `spxxxchangepassword`(
 IN `platform` VARCHAR(20), 
 IN `userindex` VARCHAR(15),
 IN `usertoken` varchar(254) , 
@@ -1197,7 +1197,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`soerjo`@`%` PROCEDURE `spxxxforgotnamepassword`(IN username varchar(320))
+CREATE PROCEDURE `spxxxforgotnamepassword`(IN username varchar(320))
 BEGIN
 	DECLARE resulterrormessage TEXT;
 	
@@ -1345,7 +1345,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`soerjo`@`%` PROCEDURE `spxxxlogout`(
+CREATE PROCEDURE `spxxxlogout`(
 	IN `platform` VARCHAR(20),
 	IN `userindex` varchar(15)
 )
@@ -1474,7 +1474,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`soerjo`@`%` PROCEDURE `spxxxresetpin`(
+CREATE PROCEDURE `spxxxresetpin`(
 	IN `platform` VARCHAR(20),
 	IN `userindex` varchar(15),
 	IN `usertoken` varchar(254),
@@ -1660,7 +1660,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`soerjo`@`%` PROCEDURE `spxxxsuspendotp`(
+CREATE PROCEDURE `spxxxsuspendotp`(
   IN `userindex` varchar(15)
 )
 BEGIN
@@ -1691,7 +1691,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`soerjo`@`%` PROCEDURE `spxxxtabletokenlast`(
+CREATE PROCEDURE `spxxxtabletokenlast`(
 	IN platform varchar(20),
 	IN tokenuserindex varchar(15),
 	IN tokenlasttoken varchar(254)
@@ -1734,7 +1734,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`soerjo`@`%` PROCEDURE `spxxxtableuser`(
+CREATE PROCEDURE `spxxxtableuser`(
 userindex char(15)
 )
 BEGIN
@@ -1789,7 +1789,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`soerjo`@`%` PROCEDURE `spxxxupdateprofile`(
+CREATE PROCEDURE `spxxxupdateprofile`(
 	IN `platform` VARCHAR(20),
 	IN `usertoken` varchar(254),
 	IN `usernamenew` varchar(20)
@@ -1949,7 +1949,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`soerjo`@`%` PROCEDURE `spxxxuserdetailid`(IN `tokentrans` VARCHAR(254))
+CREATE PROCEDURE `spxxxuserdetailid`(IN `tokentrans` VARCHAR(254))
 BEGIN
 		SELECT 
 		tempusername,
@@ -1983,7 +1983,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_AUTO_VALUE_ON_ZERO' */ ;
 DELIMITER ;;
-CREATE DEFINER=`soerjo`@`%` PROCEDURE `spxxxuserinsertnew`(	IN `userreferredby` VARCHAR(20))
+CREATE PROCEDURE `spxxxuserinsertnew`(	IN `userreferredby` VARCHAR(20))
 BEGIN	
 	
 	DECLARE resulterrormessage TEXT;
@@ -2087,7 +2087,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`soerjo`@`%` PROCEDURE `spxxxusernewpassword`(
+CREATE PROCEDURE `spxxxusernewpassword`(
 	IN `useremailverificationcode` VARCHAR(60),
 	IN `userpasswordnew` VARCHAR(60)
 )
@@ -2250,7 +2250,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`soerjo`@`%` PROCEDURE `spxxxuserprofile`(IN userindex VARCHAR(15))
+CREATE PROCEDURE `spxxxuserprofile`(IN userindex VARCHAR(15))
 BEGIN
 	DECLARE resulterrormessage TEXT;
 	
@@ -2320,7 +2320,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`soerjo`@`%` PROCEDURE `spxxxuserstore`(
+CREATE PROCEDURE `spxxxuserstore`(
 	IN `usertokentrans` VARCHAR(254),
 	IN `userfullname` VARCHAR(100),
 	IN `userdisplayname` VARCHAR(5100),

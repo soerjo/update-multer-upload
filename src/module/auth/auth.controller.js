@@ -131,8 +131,6 @@ const authSigninController = async (req, res) => {
     let resultspxxxauthsignin = await execQuery("CALL spxxxauthsignin(?,?,?,?,?,?)", [platform, tableusername, tableuserpassword, latitude, longitude, tableuserlanguage]);
     resultspxxxauthsignin = resultspxxxauthsignin[0][0];
 
-    console.log(resultspxxxauthsignin);
-
     if (!resultspxxxauthsignin.resultstatus) return responseHandler({ res, statusCode: 401, objResponse: resultspxxxauthsignin });
 
     createIdsLogsUser(res, resultspxxxauthsignin);
@@ -156,7 +154,7 @@ const authLogoutController = async (req, res) => {
   try {
     let resultsplogout = await execQuery("CALL spxxxlogout(?, ?)", [platform, userindex]);
     resultsplogout = resultsplogout[0][0];
-    console.log("OK", resultsplogout);
+
     if (!resultsplogout?.resultindex) return responseHandler({ res, statusCode: 401, objResponse: resultsplogout });
 
     createIdsLogsUser(res, resultsplogout);

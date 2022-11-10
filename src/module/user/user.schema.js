@@ -138,7 +138,6 @@ const changePhoneNumberSchema = Joi.object({
   }),
   userphonenumbershort: Joi.number()
     .custom((val, helper) => {
-      console.log(val.toString());
       if (val.toString().length < 7 || val.toString().length > 15) return helper.message("xxx005060005 must beetwen 7 and 15 digits");
       return val;
     })

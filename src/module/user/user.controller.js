@@ -77,7 +77,6 @@ const resetPinProfile = async (req, res) => {
 
   try {
     let resultspresetpin = await execQuery("CALL `spxxxresetpin`(?, ?, ?, ?, ?)", [platform, userindex, tokenlogin, userpinnew, userpassword]);
-    console.log(resultspresetpin);
     resultspresetpin = resultspresetpin[0][0];
 
     if (!resultspresetpin.resultstatus) return responseHandler({ res, statusCode: 400, objResponse: resultspresetpin });
@@ -116,9 +115,7 @@ const requestOtpController = async (req, res) => {
       return responseHandler({ res, statusCode: 400, objResponse: resultObj });
     }
 
-    console.log(new Date(), resSelectUser.tableuserphoneverificationcodenext, new Date() < resSelectUser.tableuserphoneverificationcodenext)
     if (new Date() < resSelectUser.tableuserphoneverificationcodenext) {
-      console.log('HERE')
       const abs = Math.floor(Math.abs(new Date(resSelectUser.tableuserphoneverificationcodenext).getTime() - new Date().getTime()) / 1000);
 
       resultObj.resultstatus = 0;
@@ -191,15 +188,15 @@ const validateOtpController = async (req, res) => {
       resultObj.resulterrormessage = "the otp is not valid";
 
       // if (resSelectUser.tableuserphonenumberfailedattempt < 3) {
-        const failedatempotpcount = resSelectUser.tableuserphonenumberfailedattempt + 1;
-        await execQuery("UPDATE	xxxtableuser SET tableuserphonenumberfailedattempt = ?, tableuserphonenumberfailedattemptlast = ? WHERE tableuserindex = ?;", [
-          failedatempotpcount,
-          new Date(),
-          userindex,
-        ]);
-        if( failedatempotpcount > 5) {
-          await execQuery(`CALL spxxxsuspendotp(?)`, [userindex]);
-        }
+      const failedatempotpcount = resSelectUser.tableuserphonenumberfailedattempt + 1;
+      await execQuery("UPDATE	xxxtableuser SET tableuserphonenumberfailedattempt = ?, tableuserphonenumberfailedattemptlast = ? WHERE tableuserindex = ?;", [
+        failedatempotpcount,
+        new Date(),
+        userindex,
+      ]);
+      if (failedatempotpcount > 5) {
+        await execQuery(`CALL spxxxsuspendotp(?)`, [userindex]);
+      }
       // }
 
       return responseHandler({ res, statusCode: 400, objResponse: resultObj });
@@ -215,7 +212,7 @@ const validateOtpController = async (req, res) => {
 
     await execQuery(
       "UPDATE	xxxtableuser SET tableuserphoneverificationcodenext = ?, tableuserphonenumberisverified = ?, tableuserphonenumberisverifiedtimestamp = ?, tableuserphonenumberfailedattempt = ?, tableuserphonenumberfailedattemptlast = ? WHERE tableuserindex = ?;",
-      [ new Date(), true, new Date(), 0, new Date(), userindex]
+      [new Date(), true, new Date(), 0, new Date(), userindex]
     );
 
     return responseHandler({ res });
