@@ -28,7 +28,6 @@ const responseHandler = ({ res, statusCode = 200, objResponse, data, support, er
 
   // handle error from multer "upload image"
   if (error?.name === "MulterError") {
-    statusCode = 400;
     statObjRes.status = 0;
 
     objErrorMessage.code = "xxx999999999";
@@ -38,7 +37,6 @@ const responseHandler = ({ res, statusCode = 200, objResponse, data, support, er
   }
 
   if (error?.statusCode === 400) {
-    statusCode = 400;
     statObjRes.status = 0;
 
     objErrorMessage.code = "xxx999999999";
@@ -52,7 +50,7 @@ const responseHandler = ({ res, statusCode = 200, objResponse, data, support, er
   }
 
   if (error) console.error(error);
-  saveLogs(res, statusCode, {statObjRes, data, support });
+  saveLogs(res, statusCode, { statObjRes, data, support });
 
   return res.status(statusCode).send({ status: statObjRes, data: data, support });
 };

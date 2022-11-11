@@ -15,7 +15,7 @@ const authInsertNew = async (req, res) => {
   try {
     let resultspxxxauthsignin = await execQuery("CALL spxxxuserinsertnew(?)", [tableuserreferredby]);
     resultspxxxauthsignin = resultspxxxauthsignin[0][0];
-    if (!resultspxxxauthsignin.resultstatus) return responseHandler({ res, statusCode: 404, objResponse: resultspxxxauthsignin });
+    if (!resultspxxxauthsignin.resultstatus) return responseHandler({ res, objResponse: resultspxxxauthsignin });
 
     return responseHandler({ res, objResponse: resultspxxxauthsignin });
   } catch (error) {
@@ -38,7 +38,7 @@ const authDetailId = async (req, res) => {
       resObjResult.resultcode = "xxx035020015";
       resObjResult.resulterrormessage = "tokentrans is not found";
 
-      return responseHandler({ res, statusCode: 404, objResponse: resObjResult });
+      return responseHandler({ res, objResponse: resObjResult });
     }
 
     let resultgetsupport = await execQuery("SELECT * FROM xxxtablecountryphonecode;");
@@ -79,7 +79,7 @@ const authStore = async (req, res) => {
     ]);
     resultspuserstore = resultspuserstore[0][0];
 
-    if (!resultspuserstore.resultstatus) return responseHandler({ res, statusCode: 409, objResponse: resultspuserstore });
+    if (!resultspuserstore.resultstatus) return responseHandler({ res, objResponse: resultspuserstore });
 
     createIdsLogsUser(res, resultspuserstore);
 
@@ -105,7 +105,7 @@ const authNewPassword = async (req, res) => {
     let resultspusernewpassword = await execQuery("CALL spxxxusernewpassword(?, ?)", [tableuseremailverificationcode, tableuserpasswordnew]);
     resultspusernewpassword = resultspusernewpassword[0][0];
 
-    if (!resultspusernewpassword.resultstatus) return responseHandler({ res, statusCode: 404, objResponse: resultspusernewpassword });
+    if (!resultspusernewpassword.resultstatus) return responseHandler({ res, objResponse: resultspusernewpassword });
 
     createIdsLogsUser(res, resultspusernewpassword);
 
@@ -131,11 +131,11 @@ const authSigninController = async (req, res) => {
     let resultspxxxauthsignin = await execQuery("CALL spxxxauthsignin(?,?,?,?,?,?)", [platform, tableusername, tableuserpassword, latitude, longitude, tableuserlanguage]);
     resultspxxxauthsignin = resultspxxxauthsignin[0][0];
 
-    if (!resultspxxxauthsignin.resultstatus) return responseHandler({ res, statusCode: 401, objResponse: resultspxxxauthsignin });
+    if (!resultspxxxauthsignin.resultstatus) return responseHandler({ res, objResponse: resultspxxxauthsignin });
 
     createIdsLogsUser(res, resultspxxxauthsignin);
 
-    if (!resultspxxxauthsignin.resultstatus) return responseHandler({ res, statusCode: 401, objResponse: resultspxxxauthsignin });
+    if (!resultspxxxauthsignin.resultstatus) return responseHandler({ res, objResponse: resultspxxxauthsignin });
 
     let resultspauthlogininfo = await execQuery("CALL spxxxauthlogininfo(?, ?)", [platform, resultspxxxauthsignin.resultindex]);
     resultspauthlogininfo = resultspauthlogininfo[0][0];
@@ -155,11 +155,11 @@ const authLogoutController = async (req, res) => {
     let resultsplogout = await execQuery("CALL spxxxlogout(?, ?)", [platform, userindex]);
     resultsplogout = resultsplogout[0][0];
 
-    if (!resultsplogout?.resultindex) return responseHandler({ res, statusCode: 401, objResponse: resultsplogout });
+    if (!resultsplogout?.resultindex) return responseHandler({ res, objResponse: resultsplogout });
 
     createIdsLogsUser(res, resultsplogout);
 
-    if (!resultsplogout?.resultstatus) return responseHandler({ res, statusCode: 409, objResponse: resultsplogout });
+    if (!resultsplogout?.resultstatus) return responseHandler({ res, objResponse: resultsplogout });
 
     return responseHandler({ res, objResponse: resultsplogout });
   } catch (error) {
@@ -176,11 +176,11 @@ const forgotController = async (req, res) => {
     let resultspforgotpassword = await execQuery("CALL spxxxforgotnamepassword(?)", [tableusername]);
     resultspforgotpassword = resultspforgotpassword[0][0];
 
-    if (!resultspforgotpassword.resultstatus) return responseHandler({ res, statusCode: 401, objResponse: resultspforgotpassword });
+    if (!resultspforgotpassword.resultstatus) return responseHandler({ res, objResponse: resultspforgotpassword });
 
     createIdsLogsUser(res, resultspforgotpassword);
 
-    if (!resultspforgotpassword.resultstatus) return responseHandler({ res, statusCode: 409, objResponse: resultspforgotpassword });
+    if (!resultspforgotpassword.resultstatus) return responseHandler({ res, objResponse: resultspforgotpassword });
 
     sendEmail({
       res: res,

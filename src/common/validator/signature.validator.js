@@ -15,11 +15,11 @@ const validateSignature = async (req, res) => {
 
   let concatreqbody = "";
   for (let key in allrequestheaders) {
-    allrequestheaders[key].toString().trim();
+    allrequestheaders[key]?.toString().trim();
     concatreqbody = concatreqbody + allrequestheaders[key];
   }
   for (let key in allrequestbody) {
-    allrequestbody[key].toString().trim();
+    allrequestbody[key]?.toString().trim();
     concatreqbody = concatreqbody + allrequestbody[key];
   }
 
@@ -33,7 +33,7 @@ const validateSignature = async (req, res) => {
       objReturnData.resultstatus = 0;
       objReturnData.resultmessage = [objErrorMessage];
 
-      return responseHandler({ res, statusCode: 403, objResponse: objReturnData });
+      return responseHandler({ res, objResponse: objReturnData });
     }
   }
 };

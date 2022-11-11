@@ -14,7 +14,7 @@ const validateUploadImage = async (req, res) => {
     objReturnData.resultstatus = 0;
     objReturnData.resultmessage = [objErrorMessage];
 
-    return responseHandler({ res, statusCode: 404, objResponse: objReturnData });
+    return responseHandler({ res, objResponse: objReturnData });
   }
 };
 

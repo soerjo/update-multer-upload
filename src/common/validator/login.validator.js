@@ -9,7 +9,7 @@ const validateLogin = async (req, res) => {
   let checkuser = await execQuery("CALL spxxxauthtokenlast(?,?,?)", [platform, userindex, tokenlogin]);
   checkuser = checkuser[0][0];
 
-  if (!checkuser.resultstatus) return responseHandler({ res: res, statusCode: 401, objResponse: checkuser });
+  if (!checkuser.resultstatus) return responseHandler({ res: res, objResponse: checkuser });
 
   const idsobj = new IdsObjClass();
   idsobj.id = checkuser.tableuserindex;

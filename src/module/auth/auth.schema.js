@@ -92,7 +92,7 @@ const authStoreSchema = Joi.object({
       "string.empty": `"xxx005020005" please provide fullname`,
       "string.min": `"xxx005020020" fullname length should more than 5 character`,
       "string.max": `"xxx005020025" fullname length should less than 100 character`,
-        "any.required": `"xxx005020005" please provide fullname`,
+      "any.required": `"xxx005020005" please provide fullname`,
     }),
   userphonecountrycode: Joi.number().required().label("xxx005020005 phonecountrycode").messages({
     "number.base": `"xxx0250150010" phone country code is not valid`,
@@ -101,7 +101,7 @@ const authStoreSchema = Joi.object({
   }),
   userphonenumbershort: Joi.number()
     .custom((val, helper) => {
-      if (val.toString().length < 6 || val.toString().length > 15) return helper.message("xxx005060010 must beetwen 6 and 15 digits");
+      if (val?.toString().length < 6 || val?.toString().length > 15) return helper.message("xxx005060010 must beetwen 6 and 15 digits");
       return val;
     })
     .required()
