@@ -30,7 +30,7 @@ const changeUsernameController = async (req, res) => {
     let resultspuserprofile = await execQuery("CALL spxxxupdateprofile(?,?,?)", [platform, tokenlogin, tableusername]);
     resultspuserprofile = resultspuserprofile[0][0];
 
-    if (!resultspuserprofile.resultstatus) return responseHandler({ res, statusCode: 400, objResponse: resultspuserprofile });
+    if (!resultspuserprofile.resultstatus) return responseHandler({ res, objResponse: resultspuserprofile });
 
     sendEmail({
       res: res,
@@ -55,7 +55,7 @@ const updatePasswordProfil = async (req, res) => {
     let resultspchangepassword = await execQuery("CALL spxxxchangepassword(?, ?, ?, ?, ?)", [platform, userindex, tokenlogin, userpasswordold, userpasswordnew]);
     resultspchangepassword = resultspchangepassword[0][0];
 
-    if (!resultspchangepassword.resultstatus) return responseHandler({ res, statusCode: 400, objResponse: resultspchangepassword });
+    if (!resultspchangepassword.resultstatus) return responseHandler({ res, objResponse: resultspchangepassword });
 
     sendEmail({
       res: res,
@@ -79,7 +79,7 @@ const resetPinProfile = async (req, res) => {
     let resultspresetpin = await execQuery("CALL `spxxxresetpin`(?, ?, ?, ?, ?)", [platform, userindex, tokenlogin, userpinnew, userpassword]);
     resultspresetpin = resultspresetpin[0][0];
 
-    if (!resultspresetpin.resultstatus) return responseHandler({ res, statusCode: 400, objResponse: resultspresetpin });
+    if (!resultspresetpin.resultstatus) return responseHandler({ res, objResponse: resultspresetpin });
 
     sendEmail({
       res: res,
@@ -112,7 +112,7 @@ const requestOtpController = async (req, res) => {
       resultObj.resultcode = "xxx005075010";
       resultObj.resulterrormessage = "phone number has been verified";
 
-      return responseHandler({ res, statusCode: 400, objResponse: resultObj });
+      return responseHandler({ res, objResponse: resultObj });
     }
 
     if (new Date() < resSelectUser.tableuserphoneverificationcodenext) {
@@ -124,7 +124,7 @@ const requestOtpController = async (req, res) => {
       resultObj.resultcodevariable = abs;
       // resultObj.resultcodevariable = new Date(resSelectUser.tableuserphoneverificationcodenext).getTime()
 
-      return responseHandler({ res, statusCode: 400, objResponse: resultObj });
+      return responseHandler({ res, objResponse: resultObj });
     }
 
     let sixRandomNumber = "";
@@ -171,7 +171,7 @@ const validateOtpController = async (req, res) => {
       resultObj.resultcode = "xxx999999920";
       resultObj.resulterrormessage = "please request otp first";
 
-      return responseHandler({ res, statusCode: 400, objResponse: resultObj });
+      return responseHandler({ res, objResponse: resultObj });
     }
 
     if (resSelectUser.tableuserphonenumberisverified) {
@@ -179,7 +179,7 @@ const validateOtpController = async (req, res) => {
       resultObj.resultcode = "xxx005075010";
       resultObj.resulterrormessage = "phone number has been verified";
 
-      return responseHandler({ res, statusCode: 400, objResponse: resultObj });
+      return responseHandler({ res, objResponse: resultObj });
     }
 
     if (resSelectUser.tableuserphoneverificationcode !== otp) {
@@ -199,7 +199,7 @@ const validateOtpController = async (req, res) => {
       }
       // }
 
-      return responseHandler({ res, statusCode: 400, objResponse: resultObj });
+      return responseHandler({ res, objResponse: resultObj });
     }
 
     if (new Date() > resSelectUser.tableuserphoneverificationcodeexpiry) {
@@ -207,7 +207,7 @@ const validateOtpController = async (req, res) => {
       resultObj.resultcode = "xxx005095005";
       resultObj.resulterrormessage = "the otp is expired";
 
-      return responseHandler({ res, statusCode: 400, objResponse: resultObj });
+      return responseHandler({ res, objResponse: resultObj });
     }
 
     await execQuery(
@@ -236,12 +236,12 @@ const changePhoneNumber = async (req, res) => {
       resultObj.resultcode = "xxx0250150010";
       resultObj.resulterrormessage = "phone country code is not valid";
 
-      return responseHandler({ res, statusCode: 400, objResponse: resultObj });
+      return responseHandler({ res, objResponse: resultObj });
     }
 
     let resSpChangeNumber = await execQuery("CALL spxxxchangenumberphone(?, ?, ?);", [userphonecountrycode, userphonenumbershort, userindex]);
     resSpChangeNumber = resSpChangeNumber[0][0];
-    if (!resSpChangeNumber.resultstatus) return responseHandler({ res, statusCode: 400, objResponse: resSpChangeNumber });
+    if (!resSpChangeNumber.resultstatus) return responseHandler({ res, objResponse: resSpChangeNumber });
 
     return responseHandler({ res });
   } catch (error) {

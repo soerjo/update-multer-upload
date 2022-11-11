@@ -11,7 +11,7 @@ const validator = (schema) => async (req, res) => {
     objReturnData.resultcode = "xxx999999990";
     objReturnData.resulterrormessage = "body is not found";
 
-    return responseHandler({ res, statusCode: 400, objResponse: objReturnData });
+    return responseHandler({ res, objResponse: objReturnData });
   }
 
   try {
@@ -31,7 +31,7 @@ const validator = (schema) => async (req, res) => {
           return { ...objErrorMessage };
         });
 
-      return responseHandler({ res, statusCode: 400, objResponse: objReturnData });
+      return responseHandler({ res, objResponse: objReturnData });
     }
 
     req.next = { ...req.next, ...value };

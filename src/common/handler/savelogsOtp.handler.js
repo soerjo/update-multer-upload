@@ -9,7 +9,7 @@ const saveLogsOtp = async (res, statusCode, statObjRes, error) => {
 
     const payload = {
       logsid: res?.id || "",
-      status: statObjRes?.status,
+      status: statObjRes.statObjRes?.status,
       error: error?.message || "",
       action: res.actions || "",
       actionresult: res.actionresult || "",

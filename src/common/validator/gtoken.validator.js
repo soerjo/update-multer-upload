@@ -47,7 +47,7 @@ const validateGtoken = async (req, res) => {
     throw new Error(error.message);
   }
 
-  if (!objReturnData.resultstatus) return responseHandler({ res: res, statusCode: 400, objResponse: objReturnData });
+  if (!objReturnData.resultstatus) return responseHandler({ res: res, objResponse: objReturnData });
 
   // next();
 };

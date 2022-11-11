@@ -35,7 +35,7 @@ const validatorHeaders = (schema) => async (req, res) => {
 
           return { ...objErrorMessage };
         });
-      return responseHandler({ res, statusCode: 400, objResponse: objReturnData });
+      return responseHandler({ res, objResponse: objReturnData });
     }
 
     req.next = { ...req.next, ...resheaders };
