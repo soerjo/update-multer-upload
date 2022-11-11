@@ -590,7 +590,7 @@ BEGIN
     IF @tableuserindex = '' THEN
         SET @resultstatus = false;
 		SET @resultcode = 'xxx999999950';
-		SET @resulterrormessage = 'wrong username and password';
+		SET @resulterrormessage = 'xxx999999950 wrong username and password';
         
         LEAVE BlockTRANSACTION;
     ELSE 
@@ -599,7 +599,7 @@ BEGIN
 		IF @tableuserissuspended = 1 THEN
 			SET @resultstatus = false;
 			SET @resultcode = 'xxx999999960';
-			SET @resulterrormessage = 'user suspended';
+			SET @resulterrormessage = 'xxx999999960 user suspended';
 			
 			LEAVE BlockTRANSACTION;
 		ELSE
@@ -638,14 +638,14 @@ BEGIN
                     
                     SET @resultstatus = false;
 					SET @resultcode = 'xxx999999960';
-					SET @resulterrormessage = 'user suspended';
+					SET @resulterrormessage = 'xxx999999960 user suspended';
 					
 					LEAVE BlockTRANSACTION;
 				ELSE
 				
 					SET @resultstatus = false;
 					SET @resultcode = 'xxx999999955';
-					SET @resulterrormessage = 'wrong username and password can try ### times again';
+					SET @resulterrormessage = 'xxx999999955 wrong username and password can try ### times again';
 					SET @resultcodevariable = 3 - @tableuserfailedattemptnameemail;
 					
 					LEAVE BlockTRANSACTION;
@@ -830,7 +830,7 @@ BEGIN
 			IF @tableuserissuspended = 1 THEN
 		  		SET @resultstatus = false;
 				SET @resultcode = 'xxx999999915';
-				SET @resulterrormessage = 'user suspended';
+				SET @resulterrormessage = 'xxx999999915 user suspended';
 
 				LEAVE BlockTRANSACTION;
 			END IF;
@@ -838,7 +838,7 @@ BEGIN
 			IF @tableuserindex = '' THEN
 		  		SET @resultstatus = false;
 				SET @resultcode = 'xxx999999940';
-				SET @resulterrormessage = 'unauthorize';
+				SET @resulterrormessage = 'xxx999999940 unauthorize';
 
 				LEAVE BlockTRANSACTION;
 			END IF;
@@ -874,7 +874,7 @@ BEGIN
 	        IF @tableuserissuspended = 1 THEN
 		  		SET @resultstatus = false;
 				SET @resultcode = 'xxx999999915';
-				SET @resulterrormessage = 'user suspended';
+				SET @resulterrormessage = 'xxx999999915 user suspended';
 
 				LEAVE BlockTRANSACTION;
 			END IF;
@@ -883,7 +883,7 @@ BEGIN
 			IF @tableuserindex = '' THEN
 		  		SET @resultstatus = false;
 				SET @resultcode = 'xxx999999940';
-				SET @resulterrormessage = 'unauthorize';
+				SET @resulterrormessage = 'xxx999999940 unauthorize';
 
 				LEAVE BlockTRANSACTION;
 			END IF;
@@ -1114,7 +1114,7 @@ BEGIN
     IF CHAR_LENGTH(@tableuserindex) <> 15 THEN
 		SET @resultstatus = false;
 		SET @resultcode = 'xxx005015015';
-	    SET @resulterrormessage = 'user is not found';
+	    SET @resulterrormessage = 'xxx005015015 user is not found';
 
         LEAVE BlockTRANSACTION;
     END IF;        
@@ -1569,7 +1569,7 @@ BEGIN
     IF CHAR_LENGTH(@tableuserindex) <> 15 THEN
 		SET @resultstatus = false;
 		SET @resultcode = 'xxx999999935';
-		SET @resulterrormessage = "reset pin failed!";
+		SET @resulterrormessage = "xxx999999935 reset pin failed!";
         LEAVE BlockTRANSACTION;
     END IF;        
 	SET @resultuserlanguage = @tableuserlanguage;
@@ -1886,7 +1886,7 @@ BEGIN
     IF CHAR_LENGTH(@tableuserindex) <> 15 THEN
 		SET @resultstatus = false;
 		SET @resultcode = 'xxx005010015';
-		SET @resulterrormessage = "user is not found";
+		SET @resulterrormessage = "xxx005010015 user is not found";
 	
         LEAVE BlockTRANSACTION;
     END IF;
@@ -2185,7 +2185,7 @@ BEGIN
 			IF CHAR_LENGTH(@tableuserindex) <> 15 THEN
 				SET @resultstatus = false;
 				SET @resultcode = 'xxx005010015';
-				SET @resulterrormessage = 'user index is not found';
+				SET @resulterrormessage = 'xxx005010015 user is not found';
 				LEAVE BlockTRANSACTION;
 			END IF;
 
@@ -2393,7 +2393,7 @@ BEGIN
 			IF @RowCount <> 1 THEN
 				SET @resultstatus = false;
 				SET @resultcode = 'xxx035020015';
-				SET @resulterrormessage = 'tokentrans is not found';
+				SET @resulterrormessage = ' xxx035020015 tokentrans is not found';
                 
 				LEAVE BlockTRANSACTION;
 			END IF;
@@ -2406,7 +2406,7 @@ BEGIN
 			IF @RowCount <> 1 THEN
 				SET @resultstatus = false;
 				SET @resultcode = 'xxx025015010';
-				SET @resulterrormessage = 'phone country code is not valid';
+				SET @resulterrormessage = 'xxx025015010 phone country code is not valid';
                 
 				LEAVE BlockTRANSACTION;
 			END IF;
@@ -2421,7 +2421,7 @@ BEGIN
 			IF @CountUsername > 0 THEN
 				SET @resultstatus = false;
 				SET @resultcode = 'xxx005015010';
-				SET @resulterrormessage = 'User Name already exists';
+				SET @resulterrormessage = 'xxx005015010 User Name already exists';
 			
 				LEAVE BlockTRANSACTION;
 			END IF;
@@ -2436,7 +2436,7 @@ BEGIN
 			IF @CountEmail > 0 THEN
 				SET @resultstatus = false;
 				SET @resultcode = 'xxx005035010';
-				SET @resulterrormessage = 'email already exists';
+				SET @resulterrormessage = 'xxx005035010 email already exists';
                 
 				LEAVE BlockTRANSACTION;
 			END IF;
